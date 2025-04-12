@@ -64,7 +64,15 @@ class PublicController extends Controller
     }
     public function menu_choosee_cupon_cart_save(Request $request){
         if ($request->code == 123) {
-            return view('public.cart.cupon',['id'=>$request->code]);
+            $total = 0;
+            $data = DB::table('user_cart_log')->join('t_product','t_product.t_product_code','=','user_cart_log.t_product_code')
+            ->where('user_cart_log.userid',Auth::user()->userid)->get();
+            foreach ($data as $value) {
+                $total = $total + ($value->t_product_price - ($value->t_product_price * $value->t_product_disc) / 100) * $value->t_product_qty;
+            }
+            $disc = 45000;
+            $payment = $total - $disc ;
+            return view('public.cart.cupon',['id'=>$request->code,'payment'=>$payment , 'disc'=>$disc]);
         } else {
             return 0;
         }

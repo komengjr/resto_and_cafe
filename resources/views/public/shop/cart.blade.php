@@ -186,11 +186,12 @@
                     <div class="col-lg-6">
                         <div class="shoping__checkout">
                             <span id="menu-pilihan-table"></span>
-                            <span id="menu-pilihan-cupon"></span>
+
                             <h5>Cart Total</h5>
                             <ul>
                                 <li>Subtotal <span>@currency($total)</span></li>
-                                <li>Total <span>@currency($total)</span></li>
+                                {{-- <span ></span> --}}
+                                <li id="menu-pilihan-cupon">Total <span>@currency($total)</span></li>
                             </ul>
                             <a href="#" class="primary-btn" id="button-payment-token" data-id="123"
                                 style="display: none;">PROCEED TO

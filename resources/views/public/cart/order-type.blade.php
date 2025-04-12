@@ -4,10 +4,10 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-6">
+        <div class="col-md-6 mb-2">
             <button class="btn btn-info form-control" id="button-choosse-table">Makan di Tempat</button>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
             <button class="btn btn-warning form-control">Bungkus</button>
         </div>
     </div>

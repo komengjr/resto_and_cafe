@@ -31,6 +31,11 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         @media only screen and (max-width: 950px) {
+            .header {
+                position: sticky;
+                z-index: 100001 !important;
+                top: 0;
+            }
             #list-category {
                 display: none;
             }
@@ -66,11 +71,7 @@
                 height: 55px;
                 width: 55px;
             }
-            .header {
-                position: sticky;
-                z-index: 100001 !important;
-                top: 0;
-            }
+
 
             .humberger__menu__wrapper {
                 width: 250px;

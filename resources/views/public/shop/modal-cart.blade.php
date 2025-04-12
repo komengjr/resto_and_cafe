@@ -95,7 +95,7 @@
 <script>
     var proQty = $('.pro-qty');
     proQty.prepend('<span class="dec qtybtn" style="width:20px; ">-</span>');
-    proQty.append('<span class="inc qtybtn" style="width:20px; height: 150px;">+</span>');
+    proQty.append('<span class="inc qtybtn" style="width:20px;">+</span>');
     proQty.on('click', '.qtybtn', function() {
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
