@@ -5,6 +5,7 @@
             <br>
             Meja : {{$data->m_table_master_name}}
             <input type="text" name="table" id="pick-table" value="{{$data->m_table_master_code }}" hidden>
+            {{-- <input type="text" name="cupon"> --}}
         </p>
     </div>
 </div>

@@ -23,7 +23,8 @@ class PublicController extends Controller
     public function list_menu_cart()
     {
         if (Auth::check()) {
-            $data = DB::table('user_cart_log')->join('t_product', 't_product.t_product_code', '=', 'user_cart_log.t_product_code')->get();
+            $data = DB::table('user_cart_log')->join('t_product', 't_product.t_product_code', '=', 'user_cart_log.t_product_code')
+            ->where('user_cart_log.userid',Auth::user()->userid)->get();
             return view('public.shop.cart', ['data' => $data]);
         } else {
             return view('auth.login');
@@ -46,8 +47,27 @@ class PublicController extends Controller
     }
     public function menu_remove_cart(Request $request)
     {
+
         DB::table('user_cart_log')->where('id_user_cart_log', $request->code)->where('userid', Auth::user()->userid)->delete();
         return 1;
+    }
+    public function menu_min_cart_order(Request $request)
+    {
+        DB::table('user_cart_log')->where('t_product_code', $request->code)->where('userid', Auth::user()->userid)->update(['t_product_qty'=> $request->qty]);
+        $data = DB::table('t_product')->where('t_product_code',$request->code)->first();
+        $diskon = $data->t_product_price - ($data->t_product_price*$data->t_product_disc/100);
+        $hasil = ($request->qty) * $diskon;
+        $total = "Rp. ".number_format($hasil,0,',','.')."";
+        return $total;
+    }
+    public function menu_plus_cart_order(Request $request)
+    {
+        DB::table('user_cart_log')->where('t_product_code', $request->code)->where('userid', Auth::user()->userid)->update(['t_product_qty'=> $request->qty]);
+        $data = DB::table('t_product')->where('t_product_code',$request->code)->first();
+        $diskon = $data->t_product_price - ($data->t_product_price*$data->t_product_disc/100);
+        $hasil = ($request->qty) * $diskon;
+        $total = "Rp. ".number_format($hasil,0,',','.')."";
+        return $total;
     }
     public function menu_tipe_order_cart(Request $request)
     {
@@ -76,6 +96,11 @@ class PublicController extends Controller
         } else {
             return 0;
         }
+    }
+    public function menu_cart_payment(Request $request){
+        $data = DB::table('user_cart_log')->join('t_product', 't_product.t_product_code', '=', 'user_cart_log.t_product_code')
+            ->where('user_cart_log.userid',Auth::user()->userid)->get();
+        return view('public.cart.payment-cart',['data'=>$data]);
     }
     public function menu_add_cart_product_user(Request $request)
     {

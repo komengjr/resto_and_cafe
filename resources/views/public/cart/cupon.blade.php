@@ -5,6 +5,7 @@
             <br>
             Potongan Harga : @currency($disc)
         </p>
+        <input type="text" name="cupon" id="cupon" value="{{$id}}" hidden>
     </div>
 </div>
-<li>Total <span>@currency($payment)</span></li>
+{{-- <li>Total <span>@currency($payment)</span></li> --}}

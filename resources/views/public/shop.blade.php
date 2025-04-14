@@ -50,10 +50,12 @@
             .product {
                 padding-top: 0px;
             }
+
             .modal-content {
                 border-radius: 30px;
                 padding: 10px;
             }
+
             .modal-dialog {
                 width: 100%;
                 position: absolute;
@@ -334,10 +336,27 @@
             </div>
         </div>
     </div>
+
+    <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 99999; right: 0; top: 10%;">
+        <div id="liveToastx" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+            <div class="toast-header">
+                <img src="{{ asset('assets/img/icons/alert.jpg') }}" class="rounded mr-2" alt="..." width="30">
+                <strong class="mr-auto">Notification </strong>
+                <small> 1 sec ago</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body" id="toast-body">
+
+            </div>
+        </div>
+    </div>
     <script>
         function myFunction() {
             category_at.style.display = "none";
         }
+
     </script>
     <script>
         $(document).on("click", "#button-category-product", function(e) {
@@ -432,7 +451,8 @@
                     $('#menu-shop').html('eror');
                 });
             } else {
-                alert('quantity TIdak boleh Kosong')
+                $('#liveToastx').toast('show');
+                $('#toast-body').html('Quantity Tidak Boleh Kosong');
             }
 
         });

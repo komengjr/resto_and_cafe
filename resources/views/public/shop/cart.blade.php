@@ -135,12 +135,20 @@
                                             </td>
                                             <td class="shoping__cart__quantity" style="padding-bottom: 0px;">
                                                 <div class="quantity">
-                                                    <div class="pro-qty">
-                                                        <input type="text" value="{{ $datas->t_product_qty }}">
+                                                    <div class="pro-qtys">
+                                                        <span class="dec qtybtns" id="button-min-cart-order"
+                                                            data-code="{{ $datas->t_product_code }}"
+                                                            data-qty="{{ $datas->t_product_qty }}">-</span>
+                                                        <input type="text" value="{{ $datas->t_product_qty }}"
+                                                            id="input-value-cart{{ $datas->t_product_code }}" disabled>
+                                                        <span class="inc qtybtns" id="button-plus-cart-order"
+                                                            data-code="{{ $datas->t_product_code }}"
+                                                            data-qty="{{ $datas->t_product_qty }}">+</span>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="shoping__cart__total">
+                                            <td class="shoping__cart__total"
+                                                id="shoping__cart__total{{ $datas->t_product_code }}">
                                                 @currency(($datas->t_product_price - ($datas->t_product_price * $datas->t_product_disc) / 100) * $datas->t_product_qty)
                                             </td>
                                             <td class="shoping__cart__item__close">
@@ -185,19 +193,26 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="shoping__checkout">
-                            <span id="menu-pilihan-table"></span>
 
-                            <h5>Cart Total</h5>
-                            <ul>
+                            <h5>BOOKING ORDER</h5>
+                            <span id="menu-pilihan-table"></span>
+                            <span id="menu-pilihan-cupon">
+                                <input type="text" name="cupon" id="cupon" value="" hidden>
+                            </span>
+                            {{-- <ul>
                                 <li>Subtotal <span>@currency($total)</span></li>
-                                {{-- <span ></span> --}}
+
                                 <li id="menu-pilihan-cupon">Total <span>@currency($total)</span></li>
-                            </ul>
-                            <a href="#" class="primary-btn" id="button-payment-token" data-id="123"
+                            </ul> --}}
+                            <a href="#" class="primary-btn" id="button-cart-payment"
                                 style="display: none;">PROCEED TO
                                 ORDER</a>
                         </div>
+                        <div class="checkout__order" style="padding: 30px;" id="menu-cart-payment">
+
+                        </div>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -222,9 +237,11 @@
         </div>
     </div>
     <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; top: 10%;">
-        <div id="liveToastx" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+        <div id="liveToastx" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true"
+            data-delay="3000">
             <div class="toast-header">
-                <img src="{{ asset('assets/img/icons/alert.jpg') }}" class="rounded mr-2" alt="..." width="30">
+                <img src="{{ asset('assets/img/icons/alert.jpg') }}" class="rounded mr-2" alt="..."
+                    width="30">
                 <strong class="mr-auto">Notification </strong>
                 <small> 1 sec ago</small>
                 <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -237,6 +254,7 @@
         </div>
     </div>
     <!-- Shoping Cart Section End -->
+
     <script>
         $(document).on("click", "#button-order-type", function(e) {
             e.preventDefault();
@@ -252,6 +270,53 @@
                 dataType: 'html',
             }).done(function(data) {
                 $('#menu-cart').html(data);
+            }).fail(function() {
+                $('#menu-cart').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-min-cart-order", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            document.getElementById("menu-cart-payment").style.display = "none";
+            // var qty = $(this).data("qty");
+            var qty = document.getElementById('input-value-cart'+code).value;
+            $.ajax({
+                url: "{{ route('menu_min_cart_order') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code,
+                    "qty": qty,
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#shoping__cart__total' + code).html(data);
+                // window.location.href = "{{ route('list_menu_cart') }}";
+            }).fail(function() {
+                $('#menu-cart').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-plus-cart-order", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            // var qty = $(this).data("qty");
+            var qty = document.getElementById('input-value-cart'+code).value;
+            $.ajax({
+                url: "{{ route('menu_plus_cart_order') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code,
+                    "qty": qty,
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#shoping__cart__total' + code).html(data);
+                // window.location.href = "{{ route('list_menu_cart') }}";
             }).fail(function() {
                 $('#menu-cart').html('eror');
             });
@@ -310,7 +375,7 @@
             }).done(function(data) {
                 $('#menu-pilihan-table').html(data);
                 document.getElementById("button-order-type").style.display = "none";
-                document.getElementById("button-payment-token").style.display = "block";
+                document.getElementById("button-cart-payment").style.display = "block";
             }).fail(function() {
                 // $('#menu-table-cart').html('eror');
             });
@@ -335,6 +400,28 @@
                 } else {
                     $('#menu-pilihan-cupon').html(data);
                 }
+            }).fail(function() {
+                // $('#liveToastx').toast('show');
+            });
+
+        });
+        $(document).on("click", "#button-cart-payment", function(e) {
+            e.preventDefault();
+            var meja = document.getElementById("pick-table").value;
+            var cupon = document.getElementById("cupon").value;
+            document.getElementById("menu-cart-payment").style.display = "block";
+            $.ajax({
+                url: "{{ route('menu_cart_payment') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "meja": meja,
+                    "cupon": cupon,
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-cart-payment').html(data);
             }).fail(function() {
                 // $('#liveToastx').toast('show');
             });
@@ -406,6 +493,26 @@
                     console.log('eror');
                 });
             }
+        });
+    </script>
+    <script>
+        var proQty = $('.pro-qtys');
+        proQty.prepend('');
+        proQty.append('');
+        proQty.on('click', '.qtybtns', function() {
+            var $button = $(this);
+            var oldValue = $button.parent().find('input').val();
+            if ($button.hasClass('inc')) {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 0) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 0;
+                }
+            }
+            $button.parent().find('input').val(newVal);
         });
     </script>
 @endsection
