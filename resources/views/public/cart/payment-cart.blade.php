@@ -16,7 +16,7 @@
 <div class="checkout__order__total">Total <span>@currency($total - 40000)</span></div>
 <div class="checkout__input__checkbox">
     <label for="acc-or">
-        Create an account?
+        Mengirim Notifikasi
         <input type="checkbox" id="acc-or">
         <span class="checkmark"></span>
     </label>

@@ -8,7 +8,7 @@
         <h4 class="mb-1" id="staticBackdropLabel">Input Pengeluaran Uang</h4>
         <p class="fs--2 mb-0">Support by <a class="link-600 fw-semi-bold" href="#!">Resto</a></p>
     </div>
-    <form class="row g-3 p-4" action="#" method="post" enctype="multipart/form-data">
+    <form class="row g-3 p-4" action="{{ route('defisit_money_save') }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="col-xl-12">
             <a href="#" id="file-showing" data-fancybox="images" data-caption="" style="display: none;">
@@ -26,8 +26,8 @@
                 <input type="file" id="browseFile" class="form-control" />
                 <span class="fa fa-cloud-upload-alt"></span> Upload
             </label>
-
         </div>
+        {{-- FIELD --}}
         <div class="col-md-6">
             <label class="form-label" for="inputAddress">Tipe Pengeluaran</label>
             <select id="organizerSingle" name="organizerSingle"
@@ -39,11 +39,11 @@
             </select>
         </div>
         <span id="menu-defisit-tipe"></span>
-        <div class="col-12">
+        <div class="col-md-12">
             <div class="form-check">
                 <input class="form-check-input" id="gridCheck" type="checkbox" required />
                 <label class="form-check-label" for="gridCheck">Check me</label>
-                <input id="link" type="text" name="link" class="form-control">
+                <input id="link" type="text" name="link" class="form-control" value="no_image" hidden>
             </div>
         </div>
         <div class="col-12">
@@ -59,7 +59,7 @@
         query: {
             _token: '{{ csrf_token() }}'
         }, // CSRF token
-        fileType: ['jpg', 'jpeg', 'png', 'mp4'],
+        fileType: ['jpeg', 'png'],
         headers: {
             'Accept': 'application/json'
         },

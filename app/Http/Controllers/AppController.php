@@ -449,18 +449,22 @@ class AppController extends Controller
     // PENGELUARAN / DEFISIT
     public function defisit_money()
     {
-        return view('app.pengeluaran');
+        $data = DB::table('q_inv_data')->get();
+        return view('app.pengeluaran', ['data' => $data]);
     }
-    public function defisit_money_add(Request $request){
+    public function defisit_money_add(Request $request)
+    {
         return view('app.pengeluaran.form-add');
     }
-    public function defisit_money_tipe(Request $request){
+    public function defisit_money_tipe(Request $request)
+    {
         return 123;
     }
-    public function defisit_money_tipe_set(Request $request){
+    public function defisit_money_tipe_set(Request $request)
+    {
         return view('app.pengeluaran.template-bahan');
     }
-    public function defisit_upload_file(Request $request )
+    public function defisit_upload_file(Request $request)
     {
         $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
 
@@ -472,18 +476,18 @@ class AppController extends Controller
         if ($fileReceived->isFinished()) { // file uploading is complete / all chunks are uploaded
             $file = $fileReceived->getFile(); // get file
             $extension = $file->getClientOriginalExtension();
-            $fileName = str_replace('.'.$extension, '', $file->getClientOriginalName()); //file name without extenstion
+            $fileName = str_replace('.' . $extension, '', $file->getClientOriginalName()); //file name without extenstion
             $fileName .= '_' . md5(time()) . '.' . $extension; // a unique file name
 
             $disk = Storage::disk(config('filesystems.default'));
-            $path = $disk->putFileAs('public/upload-file/'.Auth::user()->userid, $file, $fileName);
+            $path = $disk->putFileAs('public/upload-file/' . Auth::user()->userid, $file, $fileName);
             // $path1 = $disk('videos', $file, $fileName);
 
             // delete chunked file
             unlink($file->getPathname());
             return [
-                'path' => asset('public/upload-file/'.Auth::user()->userid.'/' . $fileName),
-                'filename' => 'public/upload-file/'.$fileName
+                'path' => asset('public/upload-file/' . Auth::user()->userid . '/' . $fileName),
+                'filename' => 'public/upload-file/' . Auth::user()->userid . '/' . $fileName
             ];
         }
 
@@ -493,6 +497,56 @@ class AppController extends Controller
             'done' => $handler->getPercentageDone(),
             'status' => true
         ];
+    }
+    public function defisit_money_save(Request $request)
+    {
+        DB::table('q_inv_data')->insert([
+            'no_inv' => $request->nomor,
+            'name_inv' => $request->kebutuhan,
+            'price_inv' => $request->price,
+            'date_inv' => $request->date,
+            'status_inv' => 0,
+            'file_inv' => $request->link,
+            'user_created' => Auth::user()->userid,
+            'user_verif' => null,
+            'created_at' => now()
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
+    public function defisit_detail_file_invoice(Request $request)
+    {
+        $img = DB::table('q_inv_data')->where('no_inv', $request->code)->first();
+        return view('app.pengeluaran.modal-bukti', ['img' => $img]);
+    }
+    public function defisit_detail_invoice(Request $request)
+    {
+        $data = DB::table('q_inv_data')->where('no_inv', $request->code)->first();
+        return view('app.pengeluaran.modal-detail', ['data' => $data]);
+
+    }
+    public function defisit_detail_print_invoice(Request $request){
+        $image = base64_encode(file_get_contents(public_path('resto.png')));
+
+        $pdf = PDF::loadview('app.pengeluaran.report.detail-invoice', compact('image'))->setPaper('A5', 'potrait')->setOptions(['defaultFont' => 'Courier']);
+        $pdf->output();
+        $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $height = $canvas->get_height();
+        $width = $canvas->get_width();
+
+        $canvas->set_opacity(.2, "Multiply");
+
+        $canvas->set_opacity(.1);
+
+        // $canvas->page_text($width/5, $height/2, 'Lunas', '123', 30, array(22,0,0),1,2,0);
+        $canvas->page_script('
+            $pdf->set_opacity(.1);
+            $pdf->image("resto.png", 80, 180, 255, 220);
+            ');
+        return base64_encode($pdf->stream());
+    }
+    public function defisit_verification_invoice(Request $request){
+        return view('app.pengeluaran.modal-verification');
     }
     // REKAP LAPORAN
     public function rekap_laporan()

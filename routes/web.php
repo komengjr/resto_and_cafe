@@ -120,6 +120,11 @@ Route::prefix('app')->group(function () {
     Route::post('defisit-money/pilih-tipe', [AppController::class, 'defisit_money_tipe'])->name('defisit_money_tipe');
     Route::post('defisit-money/pilih-tipe-set', [AppController::class, 'defisit_money_tipe_set'])->name('defisit_money_tipe_set');
     Route::post('defisit-money/upload-file', [AppController::class, 'defisit_upload_file'])->name('defisit_upload_file');
+    Route::post('defisit-money/save', [AppController::class, 'defisit_money_save'])->name('defisit_money_save');
+    Route::post('defisit-money/detail-file-invoice', [AppController::class, 'defisit_detail_file_invoice'])->name('defisit_detail_file_invoice');
+    Route::post('defisit-money/detail-invoice', [AppController::class, 'defisit_detail_invoice'])->name('defisit_detail_invoice');
+    Route::post('defisit-money/detail-print-invoice', [AppController::class, 'defisit_detail_print_invoice'])->name('defisit_detail_print_invoice');
+    Route::post('defisit-money/verification-fix-invoice', [AppController::class, 'defisit_verification_invoice'])->name('defisit_verification_invoice');
 
     Route::get('rekap-laporan', [AppController::class, 'rekap_laporan'])->name('rekap_laporan');
     Route::post('rekap-laporan/rekap-total', [AppController::class, 'rekap_laporan_total'])->name('rekap_laporan_total');

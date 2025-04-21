@@ -152,7 +152,8 @@
                                 <th>No</th>
                                 <th>Nota Pembelian</th>
                                 <th>Kebutuhan</th>
-                                <th>Bukti Pembelian</th>
+                                <th>User Create</th>
+                                <th>Total Biaya</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th>Action</th>
@@ -162,7 +163,24 @@
                             @php
                                 $no = 1;
                             @endphp
-
+                            @foreach ($data as $datas)
+                                <tr>
+                                    <td>{{$no++}}</td>
+                                    <td>{{$datas->no_inv}}</td>
+                                    <td>{{$datas->name_inv}}</td>
+                                    <td>{{$datas->user_created}}</td>
+                                    <td>@currency($datas->price_inv)</td>
+                                    <td>
+                                        <span class="badge bg-danger">Prosess</span>
+                                    </td>
+                                    <td>{{$datas->date_inv}}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-invoice" id="button-show-file-inv" data-code="{{$datas->no_inv}}"><i class="far fa-file-image"></i></button>
+                                        <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#modal-invoice" id="button-show-detail-inv" data-code="{{$datas->no_inv}}"><i class="fas fa-file-alt"></i></button>
+                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-invoice" id="button-verification-inv" data-code="{{$datas->no_inv}}"><i class="fas fa-clipboard-check"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
 
@@ -232,6 +250,18 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-invoice" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="menu-invoice"></div>
+            </div>
+        </div>
+    </div>
 
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> --}}
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
@@ -266,6 +296,72 @@
                 $('#menu-pengeluaran').html(data);
             }).fail(function() {
                 $('#menu-pengeluaran').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-show-file-inv", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-invoice').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('defisit_detail_file_invoice') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-invoice').html(data);
+            }).fail(function() {
+                $('#menu-invoice').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-show-detail-inv", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-invoice').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('defisit_detail_invoice') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-invoice').html(data);
+            }).fail(function() {
+                $('#menu-invoice').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-verification-inv", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-invoice').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('defisit_verification_invoice') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-invoice').html(data);
+            }).fail(function() {
+                $('#menu-invoice').html('eror');
             });
 
         });
