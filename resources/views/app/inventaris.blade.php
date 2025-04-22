@@ -73,7 +73,7 @@
                 <div class="col-xl-4">
                     <div class="card overflow-hidden" style="min-width: 12rem">
                         <div class="bg-holder bg-card"
-                            style="background-image:url(../assets/img/icons/spot-illustrations/corner-1.png);">
+                            style="background-image:url(../../assets/img/icons/spot-illustrations/corner-1.png);">
                         </div>
                         <!--/.bg-holder-->
 
@@ -89,7 +89,7 @@
                 <div class="col-xl-4">
                     <div class="card overflow-hidden" style="min-width: 12rem">
                         <div class="bg-holder bg-card"
-                            style="background-image:url(../assets/img/icons/spot-illustrations/corner-2.png);">
+                            style="background-image:url(../../assets/img/icons/spot-illustrations/corner-2.png);">
                         </div>
                         <!--/.bg-holder-->
 
@@ -105,7 +105,7 @@
                 <div class="col-xl-4">
                     <div class="card overflow-hidden" style="min-width: 12rem">
                         <div class="bg-holder bg-card"
-                            style="background-image:url(../assets/img/icons/spot-illustrations/corner-3.png);">
+                            style="background-image:url(../../assets/img/icons/spot-illustrations/corner-3.png);">
                         </div>
                         <!--/.bg-holder-->
 
@@ -145,7 +145,7 @@
                             <tr>
                                 <td class="align-middle ps-0 text-nowrap">
                                     <div class="d-flex position-relative align-items-center"><img
-                                            class="d-flex align-self-center me-2" src="../assets/img/logos/atlassian.png"
+                                            class="d-flex align-self-center me-2" src="{{ asset('assets/img/logos/atlassian.png') }}"
                                             alt="" width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Atlassian</h6>
@@ -171,7 +171,7 @@
                             <tr>
                                 <td class="align-middle ps-0 text-nowrap">
                                     <div class="d-flex position-relative align-items-center"><img
-                                            class="d-flex align-self-center me-2" src="../assets/img/logos/hubstaff.png"
+                                            class="d-flex align-self-center me-2" src="{{ asset('assets/img/logos/hubstaff.png') }}"
                                             alt="" width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Hubstaff</h6>
@@ -197,7 +197,7 @@
                             <tr>
                                 <td class="align-middle ps-0 text-nowrap">
                                     <div class="d-flex position-relative align-items-center"><img
-                                            class="d-flex align-self-center me-2" src="../assets/img/logos/bs-5.png"
+                                            class="d-flex align-self-center me-2" src="{{ asset('assets/img/logos/bs-5.png') }}"
                                             alt="" width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Bootstrap</h6>
@@ -223,7 +223,7 @@
                             <tr>
                                 <td class="align-middle ps-0 text-nowrap">
                                     <div class="d-flex position-relative align-items-center"><img
-                                            class="d-flex align-self-center me-2" src="../assets/img/logos/asana-logo.png"
+                                            class="d-flex align-self-center me-2" src="{{ asset('assets/img/logos/asana-logo.png') }}"
                                             alt="" width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Asana</h6>
@@ -250,7 +250,7 @@
                                 <td class="align-middle ps-0 text-nowrap">
                                     <div class="d-flex position-relative align-items-center"><img
                                             class="d-flex align-self-center me-2"
-                                            src="../assets/img/logos/adobe-creative-cloud.png" alt=""
+                                            src="{{ asset('assets/img/logos/adobe-creative-cloud.png') }}" alt=""
                                             width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Adobe Creative Cloud</h6>
@@ -276,7 +276,7 @@
                             <tr>
                                 <td class="align-middle ps-0 text-nowrap">
                                     <div class="d-flex position-relative align-items-center"><img
-                                            class="d-flex align-self-center me-2" src="../assets/img/logos/coursera.png"
+                                            class="d-flex align-self-center me-2" src="{{ asset('assets/img/logos/coursera.png') }}"
                                             alt="" width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Coursera</h6>
@@ -302,7 +302,7 @@
                             <tr class="border-0">
                                 <td class="align-middle ps-0 text-nowrap border-0">
                                     <div class="d-flex position-relative align-items-center"><img
-                                            class="d-flex align-self-center me-2" src="../assets/img/logos/medium.png"
+                                            class="d-flex align-self-center me-2" src="{{ asset('assets/img/logos/medium.png') }}"
                                             alt="" width="30" />
                                         <div class="flex-1"><a class="stretched-link" href="#!">
                                                 <h6 class="mb-0">Medium</h6>

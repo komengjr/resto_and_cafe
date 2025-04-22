@@ -15,7 +15,7 @@
                 <div class="col-xl-4">
                     <div class="card overflow-hidden" style="min-width: 12rem">
                         <div class="bg-holder bg-card"
-                            style="background-image:url(../assets/img/icons/spot-illustrations/corner-1.png);">
+                            style="background-image:url(../../assets/img/icons/spot-illustrations/corner-1.png);">
                         </div>
                         <!--/.bg-holder-->
 
@@ -31,7 +31,7 @@
                 <div class="col-xl-4">
                     <div class="card overflow-hidden" style="min-width: 12rem">
                         <div class="bg-holder bg-card"
-                            style="background-image:url(../assets/img/icons/spot-illustrations/corner-2.png);">
+                            style="background-image:url(../../assets/img/icons/spot-illustrations/corner-2.png);">
                         </div>
                         <!--/.bg-holder-->
 
@@ -47,7 +47,7 @@
                 <div class="col-xl-4">
                     <div class="card overflow-hidden" style="min-width: 12rem">
                         <div class="bg-holder bg-card"
-                            style="background-image:url(../assets/img/icons/spot-illustrations/corner-3.png);">
+                            style="background-image:url(../../assets/img/icons/spot-illustrations/corner-3.png);">
                         </div>
                         <!--/.bg-holder-->
 

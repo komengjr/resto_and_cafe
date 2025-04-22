@@ -285,7 +285,7 @@
                     onPending: function(result) {
                         alert("wating your payment!");
                         console.log(result);
-                        window.location.href = "{{ route('list_order') }}";
+                        location.reload();
                     },
                     onError: function(result) {
                         alert("payment failed!");

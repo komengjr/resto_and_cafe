@@ -6,12 +6,12 @@
             <div class="card bg-100 shadow-none border">
                 <div class="row gx-0 flex-between-center">
                     <div class="col-sm-auto d-flex align-items-center"><img class="ms-n2"
-                            src="../assets/img/illustrations/crm-bar-chart.png" alt="" width="90" />
+                            src="{{ asset('assets/img/illustrations/crm-bar-chart.png') }}" alt="" width="90" />
                         <div>
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
                             <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Kitchen
                                     Request</span></h4>
-                        </div><img class="ms-n4 d-md-none d-lg-block" src="../assets/img/illustrations/crm-line-chart.png"
+                        </div><img class="ms-n4 d-md-none d-lg-block" src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}"
                             alt="" width="150" />
                     </div>
                     <div class="col-md-auto p-3">

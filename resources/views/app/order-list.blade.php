@@ -13,7 +13,7 @@
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
                             <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">List Order</span>
                             </h4>
-                        </div><img class="ms-n4 d-md-none d-lg-block" src="../assets/img/illustrations/crm-line-chart.png"
+                        </div><img class="ms-n4 d-md-none d-lg-block" src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}"
                             alt="" width="150" />
                     </div>
                     <div class="col-md-auto p-3">
@@ -312,7 +312,7 @@
                     onPending: function(result) {
                         alert("wating your payment!");
                         console.log(result);
-                        window.location.href = "{{ route('list_order') }}";
+                        location.reload();
                     },
                     onError: function(result) {
                         alert("payment failed!");

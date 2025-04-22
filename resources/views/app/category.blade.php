@@ -11,11 +11,11 @@
             <div class="card bg-100 shadow-none border">
                 <div class="row gx-0 flex-between-center">
                     <div class="col-sm-auto d-flex align-items-center"><img class="ms-n2"
-                            src="../assets/img/illustrations/crm-bar-chart.png" alt="" width="90" />
+                            src="{{ asset('assets/img/illustrations/crm-bar-chart.png') }}" alt="" width="90" />
                         <div>
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
                             <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Category Product</span></h4>
-                        </div><img class="ms-n4 d-md-none d-lg-block" src="../assets/img/illustrations/crm-line-chart.png"
+                        </div><img class="ms-n4 d-md-none d-lg-block" src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}"
                             alt="" width="150" />
                     </div>
                     <div class="col-md-auto p-3">
@@ -245,7 +245,7 @@
                         <div class="col-xl-12 col-md-7">
                             <hr class="mx-ncard mb-0 d-md-none d-xxl-block" />
                             <div class="d-flex flex-between-center border-bottom py-3 pt-md-0 pt-xxl-3">
-                                <div class="d-flex"><img class="me-2" src="../assets/img/crm/email.svg "
+                                <div class="d-flex"><img class="me-2" src="{{ asset('assets/img/crm/email.svg') }}"
                                         width="16" height="16" alt="..." />
                                     <h6 class="text-700 mb-0">Data </h6>
                                 </div>

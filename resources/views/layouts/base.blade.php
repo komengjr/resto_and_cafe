@@ -94,7 +94,7 @@
 
                     </div><a class="navbar-brand" href="#">
                         <div class="d-flex align-items-center py-3"><img class="me-2"
-                                src="../assets/img/icons/spot-illustrations/falcon.png" alt=""
+                                src="{{ asset('assets/img/icons/spot-illustrations/falcon.png') }}" alt=""
                                 width="40" /><span class="font-sans-serif">Resto</span>
                         </div>
                     </a>
@@ -142,14 +142,14 @@
                                 @php
                                     $menu = DB::table('z_menu_user')
                                         ->join('z_menu', 'z_menu.menu_code', '=', 'z_menu_user.menu_code')
-                                        ->where('z_menu_user.access_code', Auth::user()->access_code)
+                                        ->where('z_menu_user.access_code', Auth::user()->access_code)->orderBy('z_menu.id_menu', 'ASC')
                                         ->get();
                                 @endphp
                                 @foreach ($menu as $menus)
-                                    <a class="nav-link" href="{{ url($menus->menu_link) }}" role="button"
+                                    <a class="nav-link" href="{{ url($menus->menu_code.'/'.$menus->menu_link) }}" role="button"
                                         aria-expanded="false">
                                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-                                                    class="far fa-folder"></span></span><span
+                                                    class="{{$menus->menu_icon}}"></span></span><span
                                                 class="nav-link-text ps-1">{{ $menus->menu_name }}</span>
                                         </div>
                                     </a>
@@ -263,25 +263,32 @@
                                             <hr class="mb-0 navbar-vertical-divider" />
                                         </div>
                                     </div>
+                                    <!-- parent pages--><a class="nav-link" href="{{ route('master_bahan') }}"
+                                        role="button" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                                    class="fas fa-balance-scale-right"></span></span><span
+                                                class="nav-link-text ps-1">Master Bahan</span>
+                                        </div>
+                                    </a>
                                     <!-- parent pages--><a class="nav-link" href="{{ route('master_user') }}"
                                         role="button" aria-expanded="false">
                                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                                     class="fas fa-user-shield"></span></span><span
-                                                class="nav-link-text ps-1">User</span>
+                                                class="nav-link-text ps-1">Master User</span>
                                         </div>
                                     </a>
                                     <!-- parent pages--><a class="nav-link" href="{{ route('master_menu') }}"
                                         role="button" aria-expanded="false">
                                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                                     class="far fa-newspaper"></span></span><span
-                                                class="nav-link-text ps-1">Menu</span>
+                                                class="nav-link-text ps-1">Master Menu</span>
                                         </div>
                                     </a>
                                     <!-- parent pages--><a class="nav-link" href="{{ route('master_akses_menu') }}"
                                         role="button" aria-expanded="false">
                                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                                     class="fas fa-shield-alt"></span></span><span
-                                                class="nav-link-text ps-1">Access Menu</span>
+                                                class="nav-link-text ps-1">Master Access Menu</span>
                                         </div>
                                     </a>
                                     <!-- parent pages--><a class="nav-link" href="{{ route('master_setting') }}"
@@ -309,7 +316,7 @@
                                 class="toggle-line"></span></span></button>
                     <a class="navbar-brand me-1 me-sm-3" href="#">
                         <div class="d-flex align-items-center"><img class="me-2"
-                                src="../assets/img/icons/spot-illustrations/falcon.png" alt=""
+                                src="{{ asset('assets/img/icons/spot-illustrations/falcon.png') }}" alt=""
                                 width="40" /><span class="font-sans-serif">Resto</span>
                         </div>
                     </a>
@@ -538,7 +545,7 @@
                             value="light" data-theme-control="theme" />
                         <label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherLight"> <span
                                 class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0"
-                                    src="../assets/img/generic/falcon-mode-default.jpg" alt="" /></span><span
+                                    src="{{ asset('assets/img/generic/falcon-mode-default.jpg') }}" alt="" /></span><span
                                 class="label-text">Light</span></label>
                     </div>
                     <div class="col-6">
@@ -546,7 +553,7 @@
                             value="dark" data-theme-control="theme" />
                         <label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherDark"> <span
                                 class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0"
-                                    src="../assets/img/generic/falcon-mode-dark.jpg" alt="" /></span><span
+                                    src="{{ asset('assets/img/generic/falcon-mode-dark.jpg') }}" alt="" /></span><span
                                 class="label-text"> Dark</span></label>
                     </div>
                 </div>
@@ -554,7 +561,7 @@
             <hr />
             <div class="d-flex justify-content-between">
                 <div class="d-flex align-items-start"><img class="me-2"
-                        src="../assets/img/icons/left-arrow-from-left.svg" width="20" alt="" />
+                        src="{{ asset('assets/img/icons/left-arrow-from-left.svg') }}" width="20" alt="" />
                     <div class="flex-1">
                         <h5 class="fs-0">RTL Mode</h5>
                         <p class="fs--1 mb-0">Switch your language direction </p><a class="fs--1"
@@ -568,7 +575,7 @@
             </div>
             <hr />
             <div class="d-flex justify-content-between">
-                <div class="d-flex align-items-start"><img class="me-2" src="../assets/img/icons/arrows-h.svg"
+                <div class="d-flex align-items-start"><img class="me-2" src="{{ asset('assets/img/icons/arrows-h.svg') }}"
                         width="20" alt="" />
                     <div class="flex-1">
                         <h5 class="fs-0">Fluid Layout</h5>
@@ -582,7 +589,7 @@
                 </div>
             </div>
             <hr />
-            <div class="d-flex align-items-start"><img class="me-2" src="../assets/img/icons/paragraph.svg"
+            <div class="d-flex align-items-start"><img class="me-2" src="{{ asset('assets/img/icons/paragraph.svg') }}"
                     width="20" alt="" />
                 <div class="flex-1">
                     <h5 class="fs-0 d-flex align-items-center">Navigation Position </h5>
@@ -621,28 +628,28 @@
                         <input class="btn-check" id="navbar-style-transparent" type="radio" name="navbarStyle"
                             value="transparent" data-theme-control="navbarStyle" />
                         <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-transparent"> <img
-                                class="img-fluid img-prototype" src="../assets/img/generic/default.png"
+                                class="img-fluid img-prototype" src="{{ asset('assets/img/generic/default.png') }}"
                                 alt="" /><span class="label-text"> Transparent</span></label>
                     </div>
                     <div class="col-6">
                         <input class="btn-check" id="navbar-style-inverted" type="radio" name="navbarStyle"
                             value="inverted" data-theme-control="navbarStyle" />
                         <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-inverted"> <img
-                                class="img-fluid img-prototype" src="../assets/img/generic/inverted.png"
+                                class="img-fluid img-prototype" src="{{ asset('assets/img/generic/inverted.png') }}"
                                 alt="" /><span class="label-text"> Inverted</span></label>
                     </div>
                     <div class="col-6">
                         <input class="btn-check" id="navbar-style-card" type="radio" name="navbarStyle"
                             value="card" data-theme-control="navbarStyle" />
                         <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-card"> <img
-                                class="img-fluid img-prototype" src="../assets/img/generic/card.png"
+                                class="img-fluid img-prototype" src="{{ asset('assets/img/generic/card.png') }}"
                                 alt="" /><span class="label-text"> Card</span></label>
                     </div>
                     <div class="col-6">
                         <input class="btn-check" id="navbar-style-vibrant" type="radio" name="navbarStyle"
                             value="vibrant" data-theme-control="navbarStyle" />
                         <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-vibrant"> <img
-                                class="img-fluid img-prototype" src="../assets/img/generic/vibrant.png"
+                                class="img-fluid img-prototype" src="{{ asset('assets/img/generic/vibrant.png') }}"
                                 alt="" /><span class="label-text"> Vibrant</span></label>
                     </div>
                 </div>

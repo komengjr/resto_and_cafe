@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Faker\Provider\Uuid;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
@@ -17,12 +18,25 @@ class AppController extends Controller
     {
         $this->middleware('auth');
     }
-
-    // CATEGORY
-    public function app_category()
+    public function url_akses($akses)
     {
-        $data = DB::table('t_category')->get();
-        return view('app.category', ['data' => $data]);
+        $data = DB::table('z_menu_user')->where('menu_code', $akses)->where('access_code', Auth::user()->access_code)->first();
+        if ($data) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    // CATEGORY
+    public function app_category($akses)
+    {
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('t_category')->get();
+            return view('app.category', ['data' => $data]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
+
     }
     public function app_category_add()
     {
@@ -56,11 +70,15 @@ class AppController extends Controller
     }
 
     // PRODUCT
-    public function app_product()
+    public function app_product($akses)
     {
-        $data = DB::table('t_product')
-            ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->get();
-        return view('app.product', ['data' => $data]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('t_product')
+                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->get();
+            return view('app.product', ['data' => $data]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function app_product_add()
     {
@@ -131,9 +149,13 @@ class AppController extends Controller
         return view('app.product.detail-product');
     }
     // STOK
-    public function app_stok()
+    public function app_stok($akses)
     {
-        return view('app.stok');
+        if ($this->url_akses($akses) == true) {
+            return view('app.stok');
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function app_stok_find()
     {
@@ -180,13 +202,17 @@ class AppController extends Controller
         return view('app.stok.log-stok', ['data' => $data]);
     }
     // Table Management
-    public function app_table()
+    public function app_table($akses)
     {
-        $data = DB::table('m_table_master')->get();
-        $proses = DB::table('m_table_master')
-            ->join('m_order_list', 'm_order_list.m_order_table', '=', 'm_table_master.m_table_master_code')
-            ->where('m_order_list.m_order_status', 0)->get();
-        return view('app.table-service', ['data' => $data, 'proses' => $proses]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('m_table_master')->get();
+            $proses = DB::table('m_table_master')
+                ->join('m_order_list', 'm_order_list.m_order_table', '=', 'm_table_master.m_table_master_code')
+                ->where('m_order_list.m_order_status', 0)->get();
+            return view('app.table-service', ['data' => $data, 'proses' => $proses]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function app_table_add()
     {
@@ -211,11 +237,16 @@ class AppController extends Controller
     }
 
     // MENU ORDER
-    public function menu_order()
+    public function menu_order($akses)
     {
-        $data = DB::table('t_product')->where('t_product_status', 1)->get();
-        $cat = DB::table('t_category')->get();
-        return view('app.menu-order', ['data' => $data, 'cat' => $cat]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('t_product')->where('t_product_status', 1)->get();
+            $cat = DB::table('t_category')->get();
+            return view('app.menu-order', ['data' => $data, 'cat' => $cat]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
+
     }
     public function menu_order_create()
     {
@@ -269,6 +300,7 @@ class AppController extends Controller
             ->join('t_product', 't_product.t_product_code', '=', 'log_order_request.t_product_code')
             ->where('log_order_request.no_order', $request->order)->get();
         return view('app.menu-order.confrim-order', ['data' => $data, 'table' => $table, 'order' => $request->order]);
+        // return 123;
     }
     public function menu_order_create_fix(Request $request)
     {
@@ -332,12 +364,16 @@ class AppController extends Controller
     }
 
     // LIST ORDER
-    public function list_order()
+    public function list_order($akses)
     {
-        $data = DB::table('m_order_list')
-            ->join('m_table_master', 'm_table_master.m_table_master_code', '=', 'm_order_list.m_order_table')
-            ->orderBy('m_order_list.id', 'DESC')->get();
-        return view('app.order-list', ['data' => $data]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('m_order_list')
+                ->join('m_table_master', 'm_table_master.m_table_master_code', '=', 'm_order_list.m_order_table')
+                ->orderBy('m_order_list.id', 'DESC')->get();
+            return view('app.order-list', ['data' => $data]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function list_order_prosess(Request $request)
     {
@@ -391,10 +427,14 @@ class AppController extends Controller
     }
 
     // KITCHEN
-    public function kitchen_req()
+    public function kitchen_req($akses)
     {
-        $data = DB::table('m_order_list')->where('m_order_status', 0)->get();
-        return view('app.kitchen', ['data' => $data]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('m_order_list')->where('m_order_status', 0)->get();
+            return view('app.kitchen', ['data' => $data]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function kitchen_req_detail(Request $request)
     {
@@ -417,13 +457,40 @@ class AppController extends Controller
         }
         return true;
     }
-
-    // VERIFICATION
-    public function verivication()
+    // BAHAN BAKU
+    public function bahan_baku($akses)
     {
-        $data = DB::table('t_product_stok')->join('t_product', 't_product.t_product_code', '=', 't_product_stok.t_product_code')
-            ->where('t_product_stok.stok_status', 0)->get();
-        return view('app.verivication', ['data' => $data]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('m_bahan_master')->get();
+            return view('app.bahan-baku',['data'=>$data]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
+    }
+    public function bahan_baku_add(Request $request){
+        return view('app.bahan-baku.form-add');
+    }
+    public function bahan_baku_save(Request $request){
+        DB::table('m_bahan_master')->insert([
+            'm_bahan_code'=>Str::uuid(),
+            'm_bahan_name'=>$request->name,
+            'm_bahan_type'=>$request->type,
+            'm_bahan_satuan'=>$request->satuan,
+            'm_bahan_status'=>1,
+            'created_at'=>now(),
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
+    // VERIFICATION
+    public function verivication($akses)
+    {
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('t_product_stok')->join('t_product', 't_product.t_product_code', '=', 't_product_stok.t_product_code')
+                ->where('t_product_stok.stok_status', 0)->get();
+            return view('app.verivication', ['data' => $data]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function verivication_detail(Request $request)
     {
@@ -447,10 +514,16 @@ class AppController extends Controller
         return 123;
     }
     // PENGELUARAN / DEFISIT
-    public function defisit_money()
+    public function defisit_money($akses)
     {
-        $data = DB::table('q_inv_data')->get();
-        return view('app.pengeluaran', ['data' => $data]);
+        if ($this->url_akses($akses) == true) {
+            $data = DB::table('q_inv_data')->get();
+            $total = DB::table('q_inv_data')->sum('price_inv');
+            $totalterima = DB::table('q_inv_data')->where('status_inv', 1)->sum('price_inv');
+            return view('app.pengeluaran', ['data' => $data, 'total' => $total, 'totalterima' => $totalterima]);
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function defisit_money_add(Request $request)
     {
@@ -524,10 +597,11 @@ class AppController extends Controller
         return view('app.pengeluaran.modal-detail', ['data' => $data]);
 
     }
-    public function defisit_detail_print_invoice(Request $request){
+    public function defisit_detail_print_invoice(Request $request)
+    {
         $image = base64_encode(file_get_contents(public_path('resto.png')));
 
-        $pdf = PDF::loadview('app.pengeluaran.report.detail-invoice', compact('image'))->setPaper('A5', 'potrait')->setOptions(['defaultFont' => 'Courier']);
+        $pdf = PDF::loadview('app.pengeluaran.report.detail-invoice', compact('image'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'Courier']);
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
 
@@ -545,13 +619,22 @@ class AppController extends Controller
             ');
         return base64_encode($pdf->stream());
     }
-    public function defisit_verification_invoice(Request $request){
+    public function defisit_verification_invoice(Request $request)
+    {
         return view('app.pengeluaran.modal-verification');
     }
-    // REKAP LAPORAN
-    public function rekap_laporan()
+    public function defisit_input_bahan_invoice(Request $request)
     {
-        return view('app.rekap-laporan');
+        return view('app.pengeluaran.input-bahan');
+    }
+    // REKAP LAPORAN
+    public function rekap_laporan($akses)
+    {
+        if ($this->url_akses($akses) == true) {
+            return view('app.rekap-laporan');
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
     public function rekap_laporan_total(Request $request)
     {

@@ -27,6 +27,24 @@ class MasterController extends Controller
             return false;
         }
     }
+    public function master_bahan(Request $request){
+        $data = DB::table('m_bahan_master')->get();
+        return view('master.bahan',['data'=>$data]);
+    }
+    public function master_bahan_add(Request $request){
+        return view('master.bahan.form-add');
+    }
+    public function master_bahan_save(Request $request){
+        DB::table('m_bahan_master')->insert([
+            'm_bahan_code'=>Str::uuid(),
+            'm_bahan_name'=>$request->name,
+            'm_bahan_type'=>$request->type,
+            'm_bahan_satuan'=>$request->satuan,
+            'm_bahan_status'=>1,
+            'created_at'=>now(),
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
     public function master_user(){
         $data = DB::table('user_mains')->get();
         return view('master.user',['data'=>$data]);

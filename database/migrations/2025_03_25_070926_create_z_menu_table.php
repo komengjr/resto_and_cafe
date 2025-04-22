@@ -18,6 +18,7 @@ class CreateZMenuTable extends Migration
             $table->string('menu_code')->unique();
             $table->string('menu_name');
             $table->string('menu_link');
+            $table->string('menu_icon')->nullable();
             $table->string('menu_status');
             $table->timestamps();
         });

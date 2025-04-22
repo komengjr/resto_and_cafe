@@ -19,7 +19,7 @@
                                         class="fas fa-file-contract me-1"> </span>Create Order</button>
                             </span>
 
-                            <a class="btn btn-falcon-danger btn-sm mb-2 mb-sm-0" type="button" href="{{ route('menu_order') }}"><span
+                            <a class="btn btn-falcon-danger btn-sm mb-2 mb-sm-0" type="button" href="#" onclick="location.reload();"><span
                                     class="fas fa-sign-out-alt me-1"></span>Exit</a>
                         </div>
                     </div>

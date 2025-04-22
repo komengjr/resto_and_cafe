@@ -280,6 +280,9 @@
             e.preventDefault();
             var order = document.getElementById("no_order").value;
             var table = document.getElementById("table").value;
+            console.log(order);
+            console.log(table);
+
             if (table == "") {
                 $('#liveToastBtn').click();
             } else {
