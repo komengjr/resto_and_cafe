@@ -222,15 +222,15 @@
                     </div>
                 </div>
                 <div class=" m-2">
-                    @foreach ($proses as $prosess)
+                    @foreach ($product as $products)
                     <div class="list-group bg-light mb-2 border border-warning">
                         <a class="list-group-item list-group-item-action flex-column align-items-start p-2 p-sm-3"
                             href="#">
                             <div class="d-flex flex-column flex-sm-row justify-content-between mb-0 mb-md-0">
-                                <h5 class="mb-0">{{ $prosess->m_table_master_name }}</h5><small
-                                    class="text-muted">{{ $prosess->m_order_date }}</small>
+                                <h5 class="mb-0">{{ $products->t_product_name }}</h5><small
+                                    class="text-muted">{{ $products->t_product_type }}</small>
                             </div>
-                            <p class="mb-0">Proses</p><small class="text-muted">{{ $prosess->no_reg_order }}</small>
+                            <p class="mb-0">Proses</p><small class="text-muted">{{ $products->t_product_price }}</small>
                         </a>
                     </div>
                 @endforeach
