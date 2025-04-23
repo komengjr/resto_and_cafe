@@ -14,8 +14,7 @@
                             src="../assets/img/illustrations/crm-bar-chart.png" alt="" width="90" />
                         <div>
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
-                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Master Data
-                                    User</span></h4>
+                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Master Cabang</span></h4>
                         </div><img class="ms-n4 d-md-none d-lg-block" src="../assets/img/illustrations/crm-line-chart.png"
                             alt="" width="150" />
                     </div>
@@ -37,7 +36,7 @@
                                     <div class="icon-item icon-item-sm bg-soft-primary shadow-none me-2 bg-soft-primary">
                                         <span class="fs--2 fas fa-table text-primary"></span>
                                     </div>
-                                    <h6 class="mb-0">Data user</h6>
+                                    <h6 class="mb-0">Data Cabang</h6>
                                 </div>
                                 <div class="dropdown font-sans-serif btn-reveal-trigger">
                                     <button
@@ -71,7 +70,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="icon-item icon-item-sm bg-soft-primary shadow-none me-2 bg-soft-info"><span
                                             class="fs--2 fas fa-user text-info"></span></div>
-                                    <h6 class="mb-0">User Aktif</h6>
+                                    <h6 class="mb-0">Cabang Aktif</h6>
                                 </div>
                                 <div class="dropdown font-sans-serif btn-reveal-trigger">
                                     <button
@@ -106,7 +105,7 @@
                                     <div class="icon-item icon-item-sm bg-soft-danger shadow-none me-2 bg-soft-success">
                                         <span class="fs--2 fas fa-bolt text-danger"></span>
                                     </div>
-                                    <h6 class="mb-0">User Non Aktif</h6>
+                                    <h6 class="mb-0">Cabang Non Aktif</h6>
                                 </div>
                                 <div class="dropdown font-sans-serif btn-reveal-trigger">
                                     <button
@@ -142,12 +141,12 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h5 class="mb-0">Data User</h5>
+                            <h5 class="mb-0">Data Cabang</h5>
                         </div>
                         <div class="col-auto">
                             <a class="btn btn-falcon-primary btn-sm" href="#!" data-bs-toggle="modal"
-                                data-bs-target="#modal-table" id="button-add-table">
-                                <span class="fas fa-calendar-plus fs--2 me-1"></span>Add User</a>
+                                data-bs-target="#modal-cabang" id="button-add-cabang">
+                                <span class="fas fa-calendar-plus fs--2 me-1"></span>Add Cabang</a>
                         </div>
                     </div>
                 </div>
@@ -156,12 +155,10 @@
                         <thead class="bg-200 text-700">
                             <tr>
                                 <th>No</th>
-                                <th>Nama User</th>
-                                <th>Username</th>
-                                <th>Akses</th>
-                                <th>Cabang</th>
+                                <th>Kode Cabang</th>
+                                <th>Nama Cabang</th>
+                                <th>Type Cabang</th>
                                 <th>Status</th>
-                                <th>Created</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -169,44 +166,14 @@
                             @php
                                 $no = 1;
                             @endphp
-                            @foreach ($data as $item)
+                            @foreach ($data as $datas)
                                 <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $item->fullname }}</td>
-                                    <td>{{ $item->username }}</td>
-                                    <td>{{ $item->access_code }}</td>
-                                    <td>{{ $item->access_cabang }}</td>
-                                    <td>
-                                        @if ($item->access_status == 1)
-                                            <span class="badge bg-success">Aktif</span>
-                                        @else
-                                            <span class="badge bg-danger">Not Aktif</span>
-                                        @endif
-                                    </td>
-
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-sm btn-primary dropdown-toggle"
-                                                id="btnGroupVerticalDrop2" type="button" data-bs-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false"><span
-                                                    class="fas fa-align-left me-1"
-                                                    data-fa-transform="shrink-3"></span>Option</button>
-                                            <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
-
-                                                <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-product" id="button-display-product"
-                                                    data-code="123"><span
-                                                        class="fas fa-chalkboard-teacher"></span>
-                                                    Detail</button>
-                                                <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-product" id="button-edit-product"
-                                                    data-code="123"><span
-                                                        class="far fa-edit"></span>
-                                                    Edit</button>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <td>{{$no++}}</td>
+                                    <td>{{$datas->master_cabang_code}}</td>
+                                    <td>{{$datas->master_cabang_name}}</td>
+                                    <td>{{$datas->master_cabang_type}}</td>
+                                    <td>{{$datas->master_cabang_status}}</td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -251,7 +218,7 @@
     </div>
 @endsection
 @section('base.js')
-    <div class="modal fade" id="modal-table" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+    <div class="modal fade" id="modal-cabang" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content border-0">
@@ -259,7 +226,7 @@
                     <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
                         data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="menu-table"></div>
+                <div id="menu-cabang"></div>
             </div>
         </div>
     </div>
@@ -279,14 +246,14 @@
         });
     </script>
     <script>
-        $(document).on("click", "#button-add-table", function(e) {
+        $(document).on("click", "#button-add-cabang", function(e) {
             e.preventDefault();
             // var code = $(this).data("code");
-            $('#menu-table').html(
+            $('#menu-cabang').html(
                 '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
             );
             $.ajax({
-                url: "{{ route('master_user_add') }}",
+                url: "{{ route('master_cabang_add') }}",
                 type: "POST",
                 cache: false,
                 data: {
@@ -295,9 +262,9 @@
                 },
                 dataType: 'html',
             }).done(function(data) {
-                $('#menu-table').html(data);
+                $('#menu-cabang').html(data);
             }).fail(function() {
-                $('#menu-table').html('eror');
+                $('#menu-cabang').html('eror');
             });
 
         });

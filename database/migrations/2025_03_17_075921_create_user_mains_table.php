@@ -23,6 +23,7 @@ class CreateUserMainsTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('access_code');
+            $table->string('access_cabang')->nullable();
             $table->boolean('access_status');
             $table->rememberToken();
             $table->timestamps();

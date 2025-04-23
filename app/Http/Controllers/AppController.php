@@ -240,9 +240,10 @@ class AppController extends Controller
     public function menu_order($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $data = DB::table('t_product')->where('t_product_status', 1)->get();
+            $cabang = DB::table('master_cabang')->where('master_cabang_code',Auth::user()->access_cabang)->first();
+            $data = DB::table('t_product')->where('t_product_status', 1)->where('master_cabang_code',Auth::user()->access_cabang)->get();
             $cat = DB::table('t_category')->get();
-            return view('app.menu-order', ['data' => $data, 'cat' => $cat]);
+            return view('app.menu-order', ['data' => $data, 'cat' => $cat,'cabang'=>$cabang]);
         } else {
             return Redirect::to('dashboard/home');
         }
@@ -268,10 +269,10 @@ class AppController extends Controller
     {
         if ($request->id == "all") {
             $data = DB::table('t_product')
-                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->get();
+                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->where('t_product.master_cabang_code',Auth::user()->access_cabang)->get();
         } else {
             $data = DB::table('t_product')
-                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')
+                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->where('t_product.master_cabang_code',Auth::user()->access_cabang)
                 ->where('t_category.t_category_code', $request->id)->get();
         }
         return view('app.menu-order.option-category', ['data' => $data]);
@@ -461,8 +462,9 @@ class AppController extends Controller
     public function bahan_baku($akses)
     {
         if ($this->url_akses($akses) == true) {
+            $product = DB::table('t_product')->get();
             $data = DB::table('m_bahan_master')->get();
-            return view('app.bahan-baku',['data'=>$data]);
+            return view('app.bahan-baku',['data'=>$data,'product'=>$product]);
         } else {
             return Redirect::to('dashboard/home');
         }

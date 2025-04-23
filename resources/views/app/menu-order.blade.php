@@ -6,7 +6,8 @@
                 <div class="card-header bg-light">
                     <div class="row flex-between-center">
                         <div class="col-sm-auto">
-                            <h5 class="mb-2 mb-sm-0">Menu Order :</h5>
+                            <h5 class="mb-2 mb-sm-0">{{$cabang->master_cabang_name}} : {{$cabang->master_cabang_location}}</h5>
+                            {{-- <p></p> --}}
                         </div>
                         <div class="col-sm-auto" id="button-create-hide"><a class="btn btn-falcon-default btn-sm"
                                 href="#!" id="button-create-new-order"><span class="fas fa-folder-plus me-2"

@@ -16,6 +16,7 @@ class CreateTProductTable extends Migration
         Schema::create('t_product', function (Blueprint $table) {
             $table->id('id_t_product');
             $table->string('t_product_code')->unique();
+            $table->string('master_cabang_code');
             $table->string('t_category_code');
             $table->string('t_product_name');
             $table->string('t_product_type');

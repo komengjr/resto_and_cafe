@@ -222,7 +222,7 @@
                     </div>
                 </div>
                 <div class=" m-2">
-                    {{-- @foreach ($proses as $prosess)
+                    @foreach ($proses as $prosess)
                     <div class="list-group bg-light mb-2 border border-warning">
                         <a class="list-group-item list-group-item-action flex-column align-items-start p-2 p-sm-3"
                             href="#">
@@ -233,7 +233,7 @@
                             <p class="mb-0">Proses</p><small class="text-muted">{{ $prosess->no_reg_order }}</small>
                         </a>
                     </div>
-                @endforeach --}}
+                @endforeach
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@ class UserMain extends Model
      */
 
     protected $fillable = [
-        'userid','fullname','username', 'email', 'number_handphone', 'password', 'access_code', 'access_status','remember_token'
+        'userid','fullname','username', 'email', 'number_handphone', 'password', 'access_code','access_cabang', 'access_status','remember_token'
     ];
 
     /**

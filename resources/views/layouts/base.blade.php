@@ -95,7 +95,7 @@
                     </div><a class="navbar-brand" href="#">
                         <div class="d-flex align-items-center py-3"><img class="me-2"
                                 src="{{ asset('assets/img/icons/spot-illustrations/falcon.png') }}" alt=""
-                                width="40" /><span class="font-sans-serif">Resto</span>
+                                width="40" /><span class="font-sans-serif">Demo</span>
                         </div>
                     </a>
                 </div>
@@ -263,11 +263,19 @@
                                             <hr class="mb-0 navbar-vertical-divider" />
                                         </div>
                                     </div>
-                                    <!-- parent pages--><a class="nav-link" href="{{ route('master_bahan') }}"
+                                    <!-- parent pages-->
+                                    {{-- <a class="nav-link" href="{{ route('master_bahan') }}"
                                         role="button" aria-expanded="false">
                                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                                     class="fas fa-balance-scale-right"></span></span><span
                                                 class="nav-link-text ps-1">Master Bahan</span>
+                                        </div>
+                                    </a> --}}
+                                    <!-- parent pages--><a class="nav-link" href="{{ route('master_cabang') }}"
+                                        role="button" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                                    class="far fa-building"></span></span><span
+                                                class="nav-link-text ps-1">Master Cabang</span>
                                         </div>
                                     </a>
                                     <!-- parent pages--><a class="nav-link" href="{{ route('master_user') }}"
@@ -692,7 +700,7 @@
 
 
     @if (session('success'))
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 99999">
             <div class="toast show" id="liveToast" role="alert" aria-live="assertive" aria-atomic="true"
                 data-options='{"autoShow":true,"showOnce":true,"cookieExpireTime":3}' data-autohide="false">
                 <div class="toast-header bg-primary text-white"><strong class="me-auto">Notice</strong><small>1 sec
@@ -718,7 +726,7 @@
     @endif
 
 
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 99999">
         <div class="toast fade" id="liveToast" role="alert" aria-live="assertive" aria-atomic="true"
             data-options='{"autoShow":true,"showOnce":true,"cookieExpireTime":720}' data-autohide="false">
             <div class="toast-header bg-danger text-white"><strong class="me-auto">Notice</strong><small>1 sec

@@ -5,9 +5,19 @@
     </div>
     <form class="row g-3 p-4" action="{{ route('master_user_save') }}" method="post" enctype="multipart/form-data">
         @csrf
+        <div class="col-12">
+            <label class="form-label" for="inputAddress">Pilih Cabang</label>
+            <select name="cabang" class="form-control" required>
+                <option value="">Choose Cabang</option>
+                @foreach ($cabang as $cabangs)
+                    <option value="{{$cabangs->master_cabang_code}}">{{$cabangs->master_cabang_name}}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="col-6">
             <label class="form-label" for="inputAddress">Nama Lengkap</label>
-            <input class="form-control" id="inputAddress" type="text" name="fullname" placeholder="amirull" required/>
+            <input class="form-control" id="inputAddress" type="text" name="fullname" placeholder="amirull"
+                required />
         </div>
         <div class="col-6">
             <label class="form-label" for="inputAddress">Akses</label>
@@ -20,23 +30,27 @@
         </div>
         <div class="col-6">
             <label class="form-label" for="inputAddress">Email</label>
-            <input class="form-control" id="inputAddress" type="email" name="email" placeholder="example@example.com" required/>
+            <input class="form-control" id="inputAddress" type="email" name="email"
+                placeholder="example@example.com" required />
         </div>
         <div class="col-6">
             <label class="form-label" for="inputAddress">No Handphone</label>
-            <input class="form-control" id="inputAddress" type="text" name="no_hp" placeholder="0892xxxxxxx" required/>
+            <input class="form-control" id="inputAddress" type="text" name="no_hp" placeholder="0892xxxxxxx"
+                required />
         </div>
         <div class="col-6">
             <label class="form-label" for="inputAddress">Username</label>
-            <input class="form-control" id="inputAddress" type="text" name="username" placeholder="amir2920" required/>
+            <input class="form-control" id="inputAddress" type="text" name="username" placeholder="amir2920"
+                required />
         </div>
         <div class="col-6">
             <label class="form-label" for="inputAddress">Password</label>
-            <input class="form-control" id="inputAddress" type="password" name="password" placeholder="******" required/>
+            <input class="form-control" id="inputAddress" type="password" name="password" placeholder="******"
+                required />
         </div>
         <div class="col-12">
             <div class="form-check">
-                <input class="form-check-input" id="gridCheck" type="checkbox" required/>
+                <input class="form-check-input" id="gridCheck" type="checkbox" required />
                 <label class="form-check-label" for="gridCheck">Check me</label>
             </div>
         </div>

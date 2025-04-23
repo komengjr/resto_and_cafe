@@ -45,12 +45,31 @@ class MasterController extends Controller
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
+    public function master_cabang(){
+        $data = DB::table('master_cabang')->get();
+        return view('master.cabang',['data'=>$data]);
+    }
+    public function master_cabang_add(){
+        return view('master.cabang.form-add');
+    }
+    public function master_cabang_save(Request $request){
+        DB::table('master_cabang')->insert([
+            'master_cabang_code' => $request->code,
+            'master_cabang_name' => $request->name,
+            'master_cabang_type' => $request->type,
+            'master_cabang_location' => $request->location,
+            'master_cabang_status' => 1,
+            'created_at' => now(),
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
     public function master_user(){
         $data = DB::table('user_mains')->get();
         return view('master.user',['data'=>$data]);
     }
     public function master_user_add(){
-        return view('master.user.form-add');
+        $cabang = DB::table('master_cabang')->get();
+        return view('master.user.form-add',['cabang'=>$cabang]);
     }
     public function master_user_save(Request $request){
         UserMain::create([
@@ -60,6 +79,7 @@ class MasterController extends Controller
             'number_handphone' => $request['no_hp'],
             'email' => $request['email'],
             'access_code' => $request['akses'],
+            'access_cabang' => $request['cabang'],
             'access_status' => '1',
             'remember_token' => Str::random(10),
             'password' => Hash::make($request['password']),

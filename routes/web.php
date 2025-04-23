@@ -150,9 +150,12 @@ Route::prefix('app')->group(function () {
 });
 
 Route::prefix('master')->group(function () {
-    Route::get('bahan', [MasterController::class, 'master_bahan'])->name('master_bahan');
-    Route::post('bahan/add', [MasterController::class, 'master_bahan_add'])->name('master_bahan_add');
-    Route::post('bahan/save', [MasterController::class, 'master_bahan_save'])->name('master_bahan_save');
+    // Route::get('bahan', [MasterController::class, 'master_bahan'])->name('master_bahan');
+    // Route::post('bahan/add', [MasterController::class, 'master_bahan_add'])->name('master_bahan_add');
+    // Route::post('bahan/save', [MasterController::class, 'master_bahan_save'])->name('master_bahan_save');
+    Route::get('cabang', [MasterController::class, 'master_cabang'])->name('master_cabang');
+    Route::post('cabang/add', [MasterController::class, 'master_cabang_add'])->name('master_cabang_add');
+    Route::post('cabang/save', [MasterController::class, 'master_cabang_save'])->name('master_cabang_save');
     Route::get('user', [MasterController::class, 'master_user'])->name('master_user');
     Route::post('user/add', [MasterController::class, 'master_user_add'])->name('master_user_add');
     Route::post('user/save', [MasterController::class, 'master_user_save'])->name('master_user_save');
