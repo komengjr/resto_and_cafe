@@ -120,6 +120,7 @@
                         <strong>Order Name</strong>
                     </td>
                     <td>Qty</td>
+                    <td>Disc</td>
                     <td style="text-align: right;">Total</td>
                 </tr>
             </thead>
@@ -130,10 +131,11 @@
                 @foreach ($data as $item)
                     <tr>
                         <td class="align-middle">
-                            <h4>{{ $item->t_product_name }}</h4>
-                            <p class="mb-0">{{ $item->t_product_type }}</p>
+                            <h4 style="margin-bottom: 0px;">{{ $item->t_product_name }}</h4>
+                            <p class="mb-0" style="margin-top: 0px;">@currency($item->t_product_price)</p>
                         </td>
                         <td class="align-middle text-center">{{ $item->quantity }}</td>
+                        <td class="align-middle text-center">{{ $item->t_product_disc }} %</td>
                         <td class="align-middle text-right" style="text-align: right;">@currency(($item->t_product_price - ($item->t_product_disc * $item->t_product_price) / 100) * $item->quantity)</td>
                     </tr>
                     @php

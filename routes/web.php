@@ -110,6 +110,7 @@ Route::prefix('app')->group(function () {
     Route::post('order-menu/print-order-fix', [AppController::class, 'menu_print_order_fix'])->name('menu_print_order_fix');
     Route::post('order-menu/menu-search-category', [AppController::class, 'menu_search_category'])->name('menu_search_category');
     Route::post('order-menu/add-cart-product', [AppController::class, 'menu_add_cart_product'])->name('menu_add_cart_product');
+    Route::post('order-menu/edit-cart-product', [AppController::class, 'menu_edit_cart_order'])->name('menu_edit_cart_order');
     Route::post('order-menu/confrim-order-customer', [AppController::class, 'menu_confrim_order_customer'])->name('menu_confrim_order_customer');
     // ORDER LIST
     Route::post('order-list/prosess', [AppController::class, 'list_order_prosess'])->name('list_order_prosess');

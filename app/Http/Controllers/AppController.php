@@ -294,6 +294,14 @@ class AppController extends Controller
         $data = DB::table('log_order_request')->join('t_product', 't_product.t_product_code', '=', 'log_order_request.t_product_code')->where('no_order', $request->order)->get();
         return view('app.menu-order.list-order', ['data' => $data]);
     }
+    public function menu_edit_cart_order(Request $request){
+        DB::table('log_order_request')->where('no_order',$request->order)->where('t_product_code',$request->code)->update(['quantity'=>$request->qty]);
+        $data = DB::table('t_product')->where('t_product_code',$request->code)->first();
+        $diskon = $data->t_product_price - ($data->t_product_price*$data->t_product_disc/100);
+        $hasil = ($request->qty) * $diskon;
+        $total = "Rp. ".number_format($hasil,0,',','.')."";
+        return $total;
+    }
     public function menu_confrim_order_customer(Request $request)
     {
         $table = DB::table('m_table_master')->where('m_table_master_code', $request->table)->first();

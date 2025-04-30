@@ -99,6 +99,7 @@
                             <thead class="light">
                                 <tr class="bg-primary text-white dark__bg-1000">
                                     <th class="border-0">Order</th>
+                                    <th class="border-0 text-center">Price</th>
                                     <th class="border-0 text-center">Qty</th>
                                     <th class="border-0 text-end">Amount</th>
                                 </tr>
@@ -113,6 +114,7 @@
                                             <h6 class="mb-0 text-nowrap">{{ $item->t_product_name }}</h6>
                                             <p class="mb-0">{{ $item->t_product_type }}</p>
                                         </td>
+                                        <td class="align-middle text-center">@currency(($item->t_product_price - ($item->t_product_disc * $item->t_product_price) / 100))</td>
                                         <td class="align-middle text-center">{{ $item->quantity }}</td>
                                         <td class="align-middle text-end">@currency(($item->t_product_price - ($item->t_product_disc * $item->t_product_price) / 100) * $item->quantity)</td>
                                     </tr>
