@@ -294,6 +294,12 @@ class AppController extends Controller
         $data = DB::table('log_order_request')->join('t_product', 't_product.t_product_code', '=', 'log_order_request.t_product_code')->where('no_order', $request->order)->get();
         return view('app.menu-order.list-order', ['data' => $data]);
     }
+    public function menu_remove_cart_product(Request $request)
+    {
+        DB::table('log_order_request')->where('no_order',$request->order)->where('t_product_code',$request->code)->delete();
+        $data = DB::table('log_order_request')->join('t_product', 't_product.t_product_code', '=', 'log_order_request.t_product_code')->where('no_order', $request->order)->get();
+        return view('app.menu-order.list-order', ['data' => $data]);
+    }
     public function menu_edit_cart_order(Request $request){
         DB::table('log_order_request')->where('no_order',$request->order)->where('t_product_code',$request->code)->update(['quantity'=>$request->qty]);
         $data = DB::table('t_product')->where('t_product_code',$request->code)->first();

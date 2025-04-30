@@ -207,8 +207,6 @@
         $(document).on("click", "#button-fix-table", function(e) {
             e.preventDefault();
             var code = $(this).data("code");
-            console.log(code);
-
             $.ajax({
                 url: "{{ route('menu_order_create_table_fix') }}",
                 type: "POST",
@@ -261,6 +259,34 @@
                 );
                 $.ajax({
                     url: "{{ route('menu_add_cart_product') }}",
+                    type: "POST",
+                    cache: false,
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "code": code,
+                        "order": order
+                    },
+                    dataType: 'html',
+                }).done(function(data) {
+                    $('#menu-table-order').html(data);
+                }).fail(function() {
+                    $('#menu-table-order').html('eror');
+                });
+            }
+
+        });
+        $(document).on("click", "#button-trash-order", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            var order = document.getElementById("no_order").value;
+            if (order == "") {
+                $('#liveToastBtn').click();
+            } else {
+                $('#menu-table-order').html(
+                    '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+                );
+                $.ajax({
+                    url: "{{ route('menu_remove_cart_product') }}",
                     type: "POST",
                     cache: false,
                     data: {

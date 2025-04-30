@@ -2,7 +2,8 @@
     <table class="table table-borderless fs--1 mb-0">
         <thead>
             <tr class="border-bottom">
-                <th class="float-start">Name</th>
+                <th class="float-start">-</th>
+                <th class="">Name</th>
                 <th class="text-center">Quantity</th>
                 <th class="float-end">Price</th>
             </tr>
@@ -12,6 +13,9 @@
         @endphp
         @foreach ($data as $item)
             <tr class="border-bottom">
+                <td class="text-center">
+                    <span class="far fa-trash-alt text-danger" id="button-trash-order" data-code="{{$item->t_product_code}}" style="cursor: pointer;"></span>
+                </td>
                 <td class="ps-0">{{ $item->t_product_name }}
                     <div class="text-400 fw-normal fs--2">{{ $item->t_product_code }}</div>
                 </td>
