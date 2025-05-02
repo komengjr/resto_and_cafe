@@ -2,6 +2,7 @@
 @section('base.css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.bootstrap5.css">
+    <link href="{{ asset('vendors/choices/choices.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('vendors/lottie/lottie.min.js') }}"></script>
     <script src="{{ asset('vendors/typed.js/typed.js') }}"></script>
     <link href="{{ asset('vendors/dropzone/dropzone.min.css') }}" rel="stylesheet" />
@@ -18,8 +19,9 @@
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
                             <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Pengeluaran
                                     Uang</span></h4>
-                        </div><img class="ms-n4 d-md-none d-lg-block" src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}"
-                            alt="" width="150" />
+                        </div><img class="ms-n4 d-md-none d-lg-block"
+                            src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}" alt=""
+                            width="150" />
                     </div>
                     <div class="col-md-auto p-3">
 
@@ -186,23 +188,27 @@
                                                     class="fas fa-align-left me-1"
                                                     data-fa-transform="shrink-3"></span>Option</button>
                                             <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
-                                                <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-invoice" id="button-input-bahan-inv"
-                                                    data-code="{{ $datas->no_inv }}"><i
-                                                        class="fas fa-download"></i></span> Input Bahan</button>
-                                                <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-invoice" id="button-show-file-inv"
-                                                    data-code="{{ $datas->no_inv }}"><i
-                                                        class="far fa-file-image"></i></span> Bukti invoice</button>
-                                                <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-invoice" id="button-show-detail-inv"
-                                                    data-code="{{ $datas->no_inv }}"><i class="fas fa-file-alt"></i>
-                                                    Detail Invoice</button>
-                                                <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-invoice" id="button-verification-inv"
-                                                    data-code="{{ $datas->no_inv }}"><i
-                                                        class="fas fa-clipboard-check"></i>
-                                                    Verification Invoice</button>
+                                                @if ($datas->status_inv == 0)
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-invoice" id="button-input-bahan-inv"
+                                                        data-code="{{ $datas->no_inv }}"><i
+                                                            class="fas fa-download"></i></span> Input Bahan</button>
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-invoice" id="button-verification-inv"
+                                                        data-code="{{ $datas->no_inv }}"><i
+                                                            class="fas fa-clipboard-check"></i>
+                                                        Verification Invoice</button>
+                                                @else
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-invoice" id="button-show-file-inv"
+                                                        data-code="{{ $datas->no_inv }}"><i
+                                                            class="far fa-file-image"></i></span> Bukti invoice</button>
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-invoice" id="button-show-detail-inv"
+                                                        data-code="{{ $datas->no_inv }}"><i class="fas fa-file-alt"></i>
+                                                        Detail Invoice</button>
+                                                @endif
+
                                             </div>
                                         </div>
                                     </td>
@@ -295,8 +301,9 @@
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.js"></script>
+    <script src="{{ asset('vendors/choices/choices.min.js') }}"></script>
     <script src="{{ asset('vendors/echarts/echarts.min.js') }}"></script>
-    <script src="{{ asset('online/resumable.min.js', []) }}"></script>
+    <script src="{{ asset('online/resumable.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/img/animated-icons/loading.json') }}"></script> --}}
     <script>
         new DataTable('#example', {
@@ -411,6 +418,52 @@
                 $('#menu-invoice').html(data);
             }).fail(function() {
                 $('#menu-invoice').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-save-bahan-detail", function(e) {
+            e.preventDefault();
+            var data = $("#form-input-bahan").serialize();
+            $('#table-bahan-invoice').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('defisit_save_bahan_invoice') }}",
+                type: "POST",
+                cache: false,
+                data: data,
+                dataType: 'html',
+            }).done(function(data) {
+                document.getElementById("bahan").value = "";
+                document.getElementById("qty").value = "";
+                document.getElementById("harga").value = "";
+                $('#table-bahan-invoice').html(data);
+            }).fail(function() {
+                $('#table-bahan-invoice').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-remove-bahan-invoice", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            var id = $(this).data("id");
+            $('#table-bahan-invoice').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('defisit_remove_bahan_invoice') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code,
+                    "id": id,
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#table-bahan-invoice').html(data);
+            }).fail(function() {
+                $('#table-bahan-invoice').html('eror');
             });
 
         });

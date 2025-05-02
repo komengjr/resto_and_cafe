@@ -141,6 +141,8 @@ Route::prefix('app')->group(function () {
     Route::post('defisit-money/detail-print-invoice', [AppController::class, 'defisit_detail_print_invoice'])->name('defisit_detail_print_invoice');
     Route::post('defisit-money/verification-fix-invoice', [AppController::class, 'defisit_verification_invoice'])->name('defisit_verification_invoice');
     Route::post('defisit-money/input-bahan-invoice', [AppController::class, 'defisit_input_bahan_invoice'])->name('defisit_input_bahan_invoice');
+    Route::post('defisit-money/save-bahan-invoice', [AppController::class, 'defisit_save_bahan_invoice'])->name('defisit_save_bahan_invoice');
+    Route::post('defisit-money/remove-bahan-invoice', [AppController::class, 'defisit_remove_bahan_invoice'])->name('defisit_remove_bahan_invoice');
     // REKAP LAPORAN
     Route::post('rekap-laporan/rekap-total', [AppController::class, 'rekap_laporan_total'])->name('rekap_laporan_total');
     Route::post('rekap-laporan/rekap-pemasukan', [AppController::class, 'rekap_laporan_pemasukan'])->name('rekap_laporan_pemasukan');

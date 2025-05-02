@@ -15,7 +15,7 @@
         cache: false,
         data: {
             "_token": "{{ csrf_token() }}",
-            "fix_order": 123,
+            "fix_order": "{{$code}}",
         },
         dataType: 'html',
     }).done(function(data) {

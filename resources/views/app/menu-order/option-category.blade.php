@@ -23,17 +23,26 @@
         </div>
         <div class="d-flex flex-between-center px-3">
             <div>
-                <span class="fa fa-star text-warning"></span><span
-                    class="fa fa-star text-warning"></span><span
-                    class="fa fa-star text-warning"></span><span
-                    class="fa fa-star text-warning"></span><span
-                    class="fa fa-star text-300"></span><span class="ms-1">(10)</span>
+                @php
+                    $stok = DB::table('t_product_stok')
+                        ->where('t_product_code', $item->t_product_code)
+                        ->where('stok_status',1)
+                        ->sum('t_stok_qty');
+                    $use = DB::table('t_product_stok')
+                        ->where('t_product_code', $item->t_product_code)
+                        ->where('stok_status',1)
+                        ->sum('t_stok_used');
+                @endphp
+                Stok<span class="ms-1">( {{ $stok - $use }} )</span>
             </div>
             <div>
-                <a class="btn btn-sm btn-falcon-default" href="#!"
-                    data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Add to Cart" id="button-add-product-list"
-                    data-code="{{ $item->t_product_code }}"><span class="fas fa-cart-plus"></span> Add</a>
+                @if (($stok - $use) > 0)
+                    <a class="btn btn-sm btn-falcon-default" href="#!"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Cart"
+                        id="button-add-product-list"
+                        data-code="{{ $item->t_product_code }}"><span
+                            class="fas fa-cart-plus"></span> Add</a>
+                @endif
             </div>
         </div>
     </div>

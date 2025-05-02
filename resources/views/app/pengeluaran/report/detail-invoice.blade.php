@@ -247,9 +247,9 @@
             <thead>
                 <tr>
                     <th class="no">#</th>
-                    <th class="desc">NOTA</th>
-                    <th class="qty">DATE NOTA</th>
-                    <th class="unit">KEBUTUHAN</th>
+                    <th class="desc">NO NOTA</th>
+                    <th class="qty">BAHAN</th>
+                    <th class="unit">JUMLAH</th>
                     <th class="total">TOTAL</th>
                 </tr>
             </thead>
@@ -258,7 +258,15 @@
                     $no = 1;
                     $hasil = 0;
                 @endphp
-
+                @foreach ($data as $datas)
+                    <tr>
+                        <td class="no">{{$no++}}</td>
+                        <td class="desc">{{$datas->no_inv}}</td>
+                        <td>{{$datas->m_bahan_name}}</td>
+                        <td class="unit">{{$datas->qty_detail}} {{$datas->m_bahan_satuan}}</td>
+                        <td class="total">@currency($datas->price_detail)</td>
+                    </tr>
+                @endforeach
 
             </tbody>
             <tfoot>

@@ -17,7 +17,8 @@ class CreateQInvDetailTable extends Migration
             $table->id('id_inv_detail');
             $table->string('no_inv');
             $table->string('m_bahan_code');
-            $table->string('price_detail');
+            $table->integer('qty_detail');
+            $table->integer('price_detail');
             $table->timestamps();
         });
     }

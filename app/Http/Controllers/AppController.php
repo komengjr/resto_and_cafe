@@ -74,7 +74,8 @@ class AppController extends Controller
     {
         if ($this->url_akses($akses) == true) {
             $data = DB::table('t_product')
-                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->get();
+                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')
+                ->where('t_product.master_cabang_code',Auth::user()->access_cabang)->get();
             return view('app.product', ['data' => $data]);
         } else {
             return Redirect::to('dashboard/home');
@@ -94,6 +95,7 @@ class AppController extends Controller
             't_product_code' => str::uuid(),
             't_category_code' => $request->category,
             't_product_name' => $request->name,
+            'master_cabang_code' => Auth::user()->access_cabang,
             't_product_type' => $request->type,
             't_product_price' => $request->price,
             't_product_disc' => $request->disc,
@@ -163,7 +165,8 @@ class AppController extends Controller
     }
     public function app_stok_find_search(Request $request)
     {
-        $data = DB::table('t_product')->where('t_product_name', 'like', '%' . $request->code . '%')->get();
+        $data = DB::table('t_product')->where('t_product_name', 'like', '%' . $request->code . '%')
+        ->where('master_cabang_code',Auth::user()->access_cabang)->get();
         return view('app.stok.hasil-pencarian', ['data' => $data]);
     }
     public function app_stok_find_detail(Request $request)
@@ -182,7 +185,8 @@ class AppController extends Controller
     }
     public function app_stok_find_keyword(Request $request)
     {
-        $data = DB::table('t_product')->where('t_product_name', 'like', '%' . $request->code . '%')->get();
+        $data = DB::table('t_product')->where('t_product_name', 'like', '%' . $request->code . '%')
+        ->where('master_cabang_code',Auth::user()->access_cabang)->get();
         return view('app.stok.hasil-keyword', ['data' => $data]);
     }
     public function app_stok_find_keyword_save(Request $request)
@@ -610,14 +614,16 @@ class AppController extends Controller
     public function defisit_detail_invoice(Request $request)
     {
         $data = DB::table('q_inv_data')->where('no_inv', $request->code)->first();
-        return view('app.pengeluaran.modal-detail', ['data' => $data]);
+        return view('app.pengeluaran.modal-detail', ['data' => $data,'code'=>$request->code]);
 
     }
     public function defisit_detail_print_invoice(Request $request)
     {
         $image = base64_encode(file_get_contents(public_path('resto.png')));
-
-        $pdf = PDF::loadview('app.pengeluaran.report.detail-invoice', compact('image'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'Courier']);
+        $data = DB::table('q_inv_detail')
+        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
+        ->where('q_inv_detail.no_inv',$request->fix_order)->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadview('app.pengeluaran.report.detail-invoice',['data'=>$data], compact('image'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'Courier']);
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
 
@@ -637,11 +643,39 @@ class AppController extends Controller
     }
     public function defisit_verification_invoice(Request $request)
     {
-        return view('app.pengeluaran.modal-verification');
+        $inv = DB::table('q_inv_data')->where('no_inv',$request->code)->first();
+        $data = DB::table('q_inv_detail')
+        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
+        ->where('q_inv_detail.no_inv',$request->code)->get();
+        return view('app.pengeluaran.modal-verification',['data'=>$data,'inv'=>$inv]);
     }
     public function defisit_input_bahan_invoice(Request $request)
     {
-        return view('app.pengeluaran.input-bahan');
+        $bahan = DB::table('q_inv_detail')
+        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
+        ->where('q_inv_detail.no_inv',$request->code)->get();
+        $data = DB::table('m_bahan_master')->get();
+        return view('app.pengeluaran.input-bahan',['data'=>$data ,'code'=>$request->code ,'bahan'=>$bahan]);
+    }
+    public function defisit_save_bahan_invoice(Request $request){
+        DB::table('q_inv_detail')->insert([
+            'no_inv'=>$request->no_inv,
+            'm_bahan_code'=>$request->bahan,
+            'qty_detail'=>$request->qty,
+            'price_detail'=>$request->harga,
+            'created_at'=>now(),
+        ]);
+        $data = DB::table('q_inv_detail')
+        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
+        ->where('q_inv_detail.no_inv',$request->no_inv)->get();
+        return view('app.pengeluaran.table-bahan',['data'=>$data]);
+    }
+    public function defisit_remove_bahan_invoice(Request $request){
+        DB::table('q_inv_detail')->where('id_inv_detail',$request->id)->delete();
+        $data = DB::table('q_inv_detail')
+        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
+        ->where('q_inv_detail.no_inv',$request->code)->get();
+        return view('app.pengeluaran.table-bahan',['data'=>$data]);
     }
     // REKAP LAPORAN
     public function rekap_laporan($akses)

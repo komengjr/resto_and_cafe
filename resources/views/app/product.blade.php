@@ -161,7 +161,7 @@
                                 <th>Price</th>
                                 <th>Discount</th>
                                 <th>Status</th>
-                                <th>Created</th>
+                                <th>Cabang</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -184,7 +184,7 @@
                                             <span class="badge bg-danger">Tidak Aktif</span>
                                         @endif
                                     </td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->master_cabang_code }}</td>
                                     <td class="text-center">
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-sm btn-primary dropdown-toggle"
