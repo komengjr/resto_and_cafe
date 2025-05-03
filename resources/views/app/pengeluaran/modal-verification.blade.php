@@ -13,8 +13,8 @@
             <div class="col-md">
                 <h5 class="mb-2 mb-md-0">{{$inv->no_inv}}</h5>
             </div>
-            <div class="col-auto">
-                <button class="btn btn-falcon-success btn-sm mb-2 mb-sm-0" type="button"><i
+            <div class="col-auto" id="loading-send-verification">
+                <button class="btn btn-falcon-success btn-sm mb-2 mb-sm-0" type="button" id="button-send-verification" data-code="{{$inv->no_inv}}"><i
                         class="fas fa-mail-bulk"></i> Send Verification</button>
             </div>
         </div>

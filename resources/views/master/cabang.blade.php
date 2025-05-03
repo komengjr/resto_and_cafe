@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="row mb-3 g-3">
-        <div class="col-xl-8">
+        <div class="col-xl-12">
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -158,7 +158,8 @@
                                 <th>Kode Cabang</th>
                                 <th>Nama Cabang</th>
                                 <th>Type Cabang</th>
-                                <th>Status</th>
+                                <th>Jumlah Staff</th>
+                                <th>Jumlah User</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -173,7 +174,27 @@
                                     <td>{{$datas->master_cabang_name}}</td>
                                     <td>{{$datas->master_cabang_type}}</td>
                                     <td>{{$datas->master_cabang_status}}</td>
-                                    <td></td>
+                                    <td>0</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-primary dropdown-toggle"
+                                                id="btnGroupVerticalDrop2" type="button" data-bs-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false"><span
+                                                    class="fas fa-align-left me-1"
+                                                    data-fa-transform="shrink-3"></span>Option</button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-master" id="button-master-staff"
+                                                        data-code="{{$datas->master_cabang_code}}"><i
+                                                            class="fas fa-download"></i></span> Master Staff</button>
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-master" id="button-master-staff"
+                                                        data-code="123"><i
+                                                            class="fas fa-clipboard-check"></i>
+                                                        Verification Invoice</button>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -181,7 +202,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4">
+        {{-- <div class="col-xl-4">
             <div class="card">
                 <div class="card-header d-flex flex-between-center py-2 border-bottom">
                     <h5 class="mb-0">Table Status Order</h5>
@@ -200,7 +221,7 @@
                     </div>
                 </div>
                 <div class=" m-2">
-                    {{-- @foreach ($proses as $prosess)
+                    @foreach ($proses as $prosess)
                         <div class="list-group bg-light mb-2 border border-warning">
                             <a class="list-group-item list-group-item-action flex-column align-items-start p-2 p-sm-3"
                                 href="#">
@@ -211,10 +232,10 @@
                                 <p class="mb-0">Proses</p><small class="text-muted">{{ $prosess->no_reg_order }}</small>
                             </a>
                         </div>
-                    @endforeach --}}
+                    @endforeach
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
 @section('base.js')
@@ -227,6 +248,18 @@
                         data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="menu-cabang"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-master" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content border-0">
+                <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="menu-master"></div>
             </div>
         </div>
     </div>
@@ -265,6 +298,28 @@
                 $('#menu-cabang').html(data);
             }).fail(function() {
                 $('#menu-cabang').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-master-staff", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-master').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('master_cabang_add_staff') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-master').html(data);
+            }).fail(function() {
+                $('#menu-master').html('eror');
             });
 
         });

@@ -119,6 +119,7 @@ Route::prefix('app')->group(function () {
     Route::post('order-list/payment-save', [AppController::class, 'list_order_prosess_payment_save'])->name('list_order_prosess_payment_save');
     Route::post('order-list/print-invoice', [AppController::class, 'list_order_print_invoice'])->name('list_order_print_invoice');
     Route::post('order-list/detail-order', [AppController::class, 'list_order_detail'])->name('list_order_detail');
+    Route::post('order-list/add-order-list', [AppController::class, 'add_order_list'])->name('add_order_list');
     // KITCHEN
     Route::post('kitchen-request/detail', [AppController::class, 'kitchen_req_detail'])->name('kitchen_req_detail');
     Route::post('kitchen-request/check', [AppController::class, 'kitchen_req_check'])->name('kitchen_req_check');
@@ -143,6 +144,7 @@ Route::prefix('app')->group(function () {
     Route::post('defisit-money/input-bahan-invoice', [AppController::class, 'defisit_input_bahan_invoice'])->name('defisit_input_bahan_invoice');
     Route::post('defisit-money/save-bahan-invoice', [AppController::class, 'defisit_save_bahan_invoice'])->name('defisit_save_bahan_invoice');
     Route::post('defisit-money/remove-bahan-invoice', [AppController::class, 'defisit_remove_bahan_invoice'])->name('defisit_remove_bahan_invoice');
+    Route::post('defisit-money/send-verification-invoice', [AppController::class, 'defisit_send_verification_invoice'])->name('defisit_send_verification_invoice');
     // REKAP LAPORAN
     Route::post('rekap-laporan/rekap-total', [AppController::class, 'rekap_laporan_total'])->name('rekap_laporan_total');
     Route::post('rekap-laporan/rekap-pemasukan', [AppController::class, 'rekap_laporan_pemasukan'])->name('rekap_laporan_pemasukan');
@@ -160,6 +162,8 @@ Route::prefix('master')->group(function () {
     Route::get('cabang', [MasterController::class, 'master_cabang'])->name('master_cabang');
     Route::post('cabang/add', [MasterController::class, 'master_cabang_add'])->name('master_cabang_add');
     Route::post('cabang/save', [MasterController::class, 'master_cabang_save'])->name('master_cabang_save');
+    Route::post('cabang/add-staff', [MasterController::class, 'master_cabang_add_staff'])->name('master_cabang_add_staff');
+    Route::post('cabang/add-staff-save', [MasterController::class, 'master_cabang_save_staff'])->name('master_cabang_save_staff');
     Route::get('user', [MasterController::class, 'master_user'])->name('master_user');
     Route::post('user/add', [MasterController::class, 'master_user_add'])->name('master_user_add');
     Route::post('user/save', [MasterController::class, 'master_user_save'])->name('master_user_save');

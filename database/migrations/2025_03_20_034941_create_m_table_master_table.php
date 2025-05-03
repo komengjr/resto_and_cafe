@@ -21,6 +21,7 @@ class CreateMTableMasterTable extends Migration
             $table->string('m_table_master_type');
             $table->string('m_table_master_status');
             $table->text('m_table_master_desc');
+            $table->string('m_table_master_cab');
             $table->timestamps();
         });
     }

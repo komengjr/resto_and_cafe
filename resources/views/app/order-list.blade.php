@@ -13,8 +13,9 @@
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
                             <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">List Order</span>
                             </h4>
-                        </div><img class="ms-n4 d-md-none d-lg-block" src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}"
-                            alt="" width="150" />
+                        </div><img class="ms-n4 d-md-none d-lg-block"
+                            src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}" alt=""
+                            width="150" />
                     </div>
                     <div class="col-md-auto p-3">
                         <form class="row align-items-center g-3">
@@ -67,6 +68,7 @@
                             <th class="sort pe-1 align-middle white-space-nowrap" data-sort="address">Request Order</th>
                             <th class="sort pe-1 align-middle white-space-nowrap" data-sort="address">Table Order</th>
                             <th class="sort pe-1 align-middle white-space-nowrap" data-sort="address">user</th>
+                            <th class="sort pe-1 align-middle white-space-nowrap" data-sort="address">Cabang</th>
                             <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="status">Status</th>
                             <th class="sort pe-1 align-middle white-space-nowrap text-end" data-sort="amount">Amount</th>
                             <th class="no-sort"></th>
@@ -123,6 +125,7 @@
                                         {{ $user->fullname }}
                                     @endif
                                 </td>
+                                <td class="address py-2 align-middle white-space-nowrap">{{$item->m_order_cabang}}</td>
                                 <td class="status py-2 align-middle text-center fs-0 white-space-nowrap">
                                     @if ($item->m_order_status == 2)
                                         <span class="badge badge rounded-pill d-block badge-soft-success">Done</span>
@@ -146,14 +149,21 @@
                                                 @if ($item->m_order_status == 1)
                                                     <a class="dropdown-item" href="#!" data-bs-toggle="modal"
                                                         data-bs-target="#modal-order-list" id="button-prosess-order"
-                                                        data-code="{{ $item->no_reg_order }}"><span class="fas fa-money-check"></span> Prosess Payment</a>
+                                                        data-code="{{ $item->no_reg_order }}"><span
+                                                            class="fas fa-money-check"></span> Prosess Payment</a>
                                                 @endif
                                                 <a class="dropdown-item" href="#!" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-order-list" id="button-print-invoice" data-code="{{ $item->no_reg_order }}"><span class="fas fa-file-invoice"></span> Print Order</a>
+                                                    data-bs-target="#modal-order-list" id="button-print-invoice"
+                                                    data-code="{{ $item->no_reg_order }}"><span
+                                                        class="fas fa-file-invoice"></span> Print Order</a>
                                                 <a class="dropdown-item" href="#!" data-bs-toggle="modal"
-                                                data-bs-target="#modal-order-list" id="button-detail-order" data-code="{{ $item->no_reg_order }}"><span class="far fa-file-alt"></span> Detail Order</a>
-                                                <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                                    href="#!">Return</a>
+                                                    data-bs-target="#modal-order-list" id="button-detail-order"
+                                                    data-code="{{ $item->no_reg_order }}"><span
+                                                        class="far fa-file-alt"></span> Detail Order</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-warning" href="#!"
+                                                data-bs-toggle="modal" data-bs-target="#modal-add-order-list" id="button-add-order-list" data-code="{{ $item->no_reg_order }}">
+                                                <span class="fas fa-file-invoice"></span> Menambah Menu</a>
                                             </div>
                                         </div>
                                     </div>
@@ -186,6 +196,18 @@
                         data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="menu-order-list-modal"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-add-order-list" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1" id="button-x">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="menu-add-order-list-modal"></div>
             </div>
         </div>
     </div>
@@ -278,11 +300,33 @@
             }).done(function(data) {
                 // $('#menu-order-list-modal').html(data);
                 $('#menu-order-list-modal').html(
-                        '<iframe src="data:application/pdf;base64, ' +
-                        data +
-                        '" style="width:100%; height:533px;" frameborder="0"></iframe>');
+                    '<iframe src="data:application/pdf;base64, ' +
+                    data +
+                    '" style="width:100%; height:533px;" frameborder="0"></iframe>');
             }).fail(function() {
                 $('#menu-order-list-modal').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-add-order-list", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-add-order-list-modal').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('add_order_list') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-add-order-list-modal').html(data);
+            }).fail(function() {
+                $('#menu-add-order-list-modal').html('eror');
             });
 
         });

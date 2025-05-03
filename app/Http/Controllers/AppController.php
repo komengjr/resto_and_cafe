@@ -209,9 +209,10 @@ class AppController extends Controller
     public function app_table($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $data = DB::table('m_table_master')->get();
+            $data = DB::table('m_table_master')->where('m_table_master.m_table_master_cab',Auth::user()->access_cabang)->get();
             $proses = DB::table('m_table_master')
                 ->join('m_order_list', 'm_order_list.m_order_table', '=', 'm_table_master.m_table_master_code')
+                ->where('m_table_master.m_table_master_cab',Auth::user()->access_cabang)
                 ->where('m_order_list.m_order_status', 0)->get();
             return view('app.table-service', ['data' => $data, 'proses' => $proses]);
         } else {
@@ -231,6 +232,7 @@ class AppController extends Controller
             'm_table_master_type' => $request->type,
             'm_table_master_status' => 1,
             'm_table_master_desc' => $request->desc,
+            'm_table_master_cab' => Auth::user()->access_cabang,
             'created_at' => now(),
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
@@ -260,6 +262,7 @@ class AppController extends Controller
     public function menu_order_create_table()
     {
         $table = DB::table('m_table_master')
+            ->where('m_table_master_cab',Auth::user()->access_cabang)
             // ->join('m_order_list','m_order_list.m_order_table','=','m_table_master.m_table_master_code')
             ->get();
         return view('app.menu-order.choose-table', ['table' => $table]);
@@ -331,6 +334,7 @@ class AppController extends Controller
             'm_order_no' => $request->no_hp,
             'm_order_date' => now(),
             'userid' => Auth::user()->userid,
+            'm_order_cabang' => Auth::user()->access_cabang,
             'created_at' => now(),
         ]);
         $cek = DB::table('log_order_request')
@@ -388,6 +392,7 @@ class AppController extends Controller
         if ($this->url_akses($akses) == true) {
             $data = DB::table('m_order_list')
                 ->join('m_table_master', 'm_table_master.m_table_master_code', '=', 'm_order_list.m_order_table')
+                ->where('m_order_list.m_order_cabang',Auth::user()->access_cabang)
                 ->orderBy('m_order_list.id', 'DESC')->get();
             return view('app.order-list', ['data' => $data]);
         } else {
@@ -444,12 +449,16 @@ class AppController extends Controller
     {
         return view('app.list-order.detail-order');
     }
-
+    public function add_order_list(Request $request){
+        return view('app.list-order.add-menu-order');
+    }
     // KITCHEN
     public function kitchen_req($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $data = DB::table('m_order_list')->where('m_order_status', 0)->get();
+            $data = DB::table('m_order_list')
+            ->where('m_order_cabang',Auth::user()->access_cabang)
+            ->where('m_order_status', 0)->get();
             return view('app.kitchen', ['data' => $data]);
         } else {
             return Redirect::to('dashboard/home');
@@ -537,9 +546,9 @@ class AppController extends Controller
     public function defisit_money($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $data = DB::table('q_inv_data')->get();
-            $total = DB::table('q_inv_data')->sum('price_inv');
-            $totalterima = DB::table('q_inv_data')->where('status_inv', 1)->sum('price_inv');
+            $data = DB::table('q_inv_data')->where('cabang_inv',Auth::user()->access_cabang)->get();
+            $total = DB::table('q_inv_data')->where('cabang_inv',Auth::user()->access_cabang)->sum('price_inv');
+            $totalterima = DB::table('q_inv_data')->where('cabang_inv',Auth::user()->access_cabang)->where('status_inv', 2)->sum('price_inv');
             return view('app.pengeluaran', ['data' => $data, 'total' => $total, 'totalterima' => $totalterima]);
         } else {
             return Redirect::to('dashboard/home');
@@ -600,6 +609,7 @@ class AppController extends Controller
             'date_inv' => $request->date,
             'status_inv' => 0,
             'file_inv' => $request->link,
+            'cabang_inv' => Auth::user()->access_cabang,
             'user_created' => Auth::user()->userid,
             'user_verif' => null,
             'created_at' => now()
@@ -676,6 +686,12 @@ class AppController extends Controller
         ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
         ->where('q_inv_detail.no_inv',$request->code)->get();
         return view('app.pengeluaran.table-bahan',['data'=>$data]);
+    }
+    public function defisit_send_verification_invoice(Request $request){
+        DB::table('q_inv_data')->where('no_inv',$request->code)->update([
+            'status_inv'=>1
+        ]);
+        return 123;
     }
     // REKAP LAPORAN
     public function rekap_laporan($akses)

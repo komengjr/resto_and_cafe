@@ -175,6 +175,10 @@
                                     <td>
                                         @if ($datas->status_inv == 0)
                                             <span class="badge bg-danger">Prosess</span>
+                                        @elseif($datas->status_inv == 1)
+                                            <span class="badge bg-warning">Menunggu Verification</span>
+                                        @elseif($datas->status_inv == 2)
+                                            <span class="badge bg-success">Diterima</span>
                                         @else
                                             <span class="badge bg-success">Diterima</span>
                                         @endif
@@ -198,6 +202,10 @@
                                                         data-code="{{ $datas->no_inv }}"><i
                                                             class="fas fa-clipboard-check"></i>
                                                         Verification Invoice</button>
+                                                @elseif($datas->status_inv == 1)
+                                                <button class="dropdown-item" disabled><i
+                                                            class="fas fa-business-time"></i>
+                                                        Mohon Menunggu</button>
                                                 @else
                                                     <button class="dropdown-item" data-bs-toggle="modal"
                                                         data-bs-target="#modal-invoice" id="button-show-file-inv"
@@ -464,6 +472,30 @@
                 $('#table-bahan-invoice').html(data);
             }).fail(function() {
                 $('#table-bahan-invoice').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-send-verification", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#loading-send-verification').html(
+                '<div class="spinner-border" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('defisit_send_verification_invoice') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code,
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }).fail(function() {
+                $('#loading-send-verification').html('eror');
             });
 
         });

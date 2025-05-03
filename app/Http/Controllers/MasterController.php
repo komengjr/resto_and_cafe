@@ -63,6 +63,33 @@ class MasterController extends Controller
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
+    public function master_cabang_add_staff(Request $request){
+        $data = DB::table('master_cabang')->where('master_cabang_code',$request->code)->first();
+        $staff = DB::table('master_staff')->where('master_staff_cab',$request->code)->get();
+        return view('master.cabang.form-add-staff',['data'=>$data,'staff'=>$staff]);
+    }
+    public function master_cabang_save_staff(Request $request){
+        $file = $request->file('file');
+        $tujuan_upload = 'data_karyawan';
+        $file->move($tujuan_upload, $file->getClientOriginalName());
+        DB::table('master_staff')->insert([
+            'userid'=>'UID-' . Str::random(4),
+            'master_staff_nik'=>$request->nik,
+            'master_staff_nip'=>$request->nip,
+            'master_staff_name'=>$request->name,
+            'master_staff_ttl'=>$request->ttl,
+            'master_staff_bod'=>$request->bod,
+            'master_staff_sex'=>$request->sex,
+            'master_staff_agama'=>$request->agama,
+            'master_staff_hp'=>$request->no_hp,
+            'master_staff_job'=>$request->job,
+            'master_staff_cab'=>$request->cabang,
+            'master_staff_alamat'=>$request->alamat,
+            'master_staff_file'=>$tujuan_upload . '/' . $file->getClientOriginalName(),
+            'created_at' => now()
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
     public function master_user(){
         $data = DB::table('user_mains')->get();
         return view('master.user',['data'=>$data]);

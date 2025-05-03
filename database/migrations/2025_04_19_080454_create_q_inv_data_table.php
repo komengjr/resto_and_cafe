@@ -21,6 +21,7 @@ class CreateQInvDataTable extends Migration
             $table->date('date_inv');
             $table->string('status_inv');
             $table->text('file_inv');
+            $table->string('cabang_inv');
             $table->string('user_created');
             $table->string('user_verif')->nullable();
             $table->timestamps();

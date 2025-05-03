@@ -266,6 +266,9 @@
                         <td class="unit">{{$datas->qty_detail}} {{$datas->m_bahan_satuan}}</td>
                         <td class="total">@currency($datas->price_detail)</td>
                     </tr>
+                    @php
+                        $hasil = $hasil + $datas->price_detail ;
+                    @endphp
                 @endforeach
 
             </tbody>
