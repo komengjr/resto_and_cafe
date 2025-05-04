@@ -248,8 +248,9 @@
                 <tr>
                     <th class="no">#</th>
                     <th class="desc">NOTA</th>
-                    <th class="qty">DATE NOTA</th>
-                    <th class="unit">KEBUTUHAN</th>
+                    <th class="unit">DATE NOTA</th>
+                    <th class="qty">KEBUTUHAN</th>
+                    <th class="unit">BAHAN</th>
                     <th class="total">TOTAL</th>
                 </tr>
             </thead>
@@ -258,8 +259,28 @@
                     $no = 1;
                     $hasil = 0;
                 @endphp
-
-
+                @foreach ($data as $datas)
+                    <tr>
+                        <td class="no">{{$no++}}</td>
+                        <td class="desc">{{$datas->no_inv}}</td>
+                        <td class="unit">{{$datas->date_inv}}</td>
+                        <td class="desc">{{$datas->name_inv}}</td>
+                        <td class="desc">
+                            @php
+                                $item = DB::table('q_inv_detail')
+                                ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
+                                ->where('q_inv_detail.no_inv',$datas->no_inv)->get();
+                            @endphp
+                            @foreach ($item as $items)
+                                <p>{{$items->m_bahan_name}} {{$items->qty_detail}} {{$items->m_bahan_satuan}}</p>
+                            @endforeach
+                        </td>
+                        <td class="total">@currency($datas->price_inv)</td>
+                    </tr>
+                    @php
+                        $hasil = $hasil + $datas->price_inv;
+                    @endphp
+                @endforeach
             </tbody>
             <tfoot>
                 <tr>
@@ -274,7 +295,7 @@
                 </tr> --}}
                 <tr>
                     <td colspan="2"></td>
-                    <td colspan="2">GRAND TOTAL</td>
+                    <td colspan="3">GRAND TOTAL</td>
                     <td>@currency($hasil)</td>
                 </tr>
             </tfoot>

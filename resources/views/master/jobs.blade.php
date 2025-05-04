@@ -14,7 +14,7 @@
                             src="../assets/img/illustrations/crm-bar-chart.png" alt="" width="90" />
                         <div>
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
-                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Master Cabang</span></h4>
+                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Master Jobs</span></h4>
                         </div><img class="ms-n4 d-md-none d-lg-block" src="../assets/img/illustrations/crm-line-chart.png"
                             alt="" width="150" />
                     </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="row mb-3 g-3">
         <div class="col-xl-12">
-            <div class="card mb-3">
+            {{-- <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4 border-lg-end border-bottom border-lg-0 pb-3 pb-lg-0">
@@ -136,17 +136,17 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="card mb-3">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h5 class="mb-0">Data Cabang</h5>
+                            <h5 class="mb-0">Data Jabatan Cabang</h5>
                         </div>
                         <div class="col-auto">
                             <a class="btn btn-falcon-primary btn-sm" href="#!" data-bs-toggle="modal"
-                                data-bs-target="#modal-cabang" id="button-add-cabang">
-                                <span class="fas fa-calendar-plus fs--2 me-1"></span>Add Cabang</a>
+                                data-bs-target="#modal-jobs" id="button-add-jobs">
+                                <span class="fas fa-calendar-plus fs--2 me-1"></span>Add Jobs</a>
                         </div>
                     </div>
                 </div>
@@ -155,11 +155,9 @@
                         <thead class="bg-200 text-700">
                             <tr>
                                 <th>No</th>
-                                <th>Kode Cabang</th>
-                                <th>Nama Cabang</th>
-                                <th>Type Cabang</th>
-                                <th>Jumlah Staff</th>
-                                <th>Jumlah User</th>
+                                <th>Kode Jabatan</th>
+                                <th>Jabatan</th>
+                                <th>Cabang</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -167,14 +165,12 @@
                             @php
                                 $no = 1;
                             @endphp
-                            @foreach ($data as $datas)
+                            @foreach ($jobs as $job)
                                 <tr>
                                     <td>{{$no++}}</td>
-                                    <td>{{$datas->master_cabang_code}}</td>
-                                    <td>{{$datas->master_cabang_name}}</td>
-                                    <td>{{$datas->master_cabang_type}}</td>
-                                    <td>{{$datas->master_cabang_status}}</td>
-                                    <td>0</td>
+                                    <td>{{$job->master_jobs_code}}</td>
+                                    <td>{{$job->master_jobs_name}}</td>
+                                    <td>{{$job->master_cabang_name}}</td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-sm btn-primary dropdown-toggle"
@@ -185,13 +181,9 @@
                                             <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
                                                     <button class="dropdown-item" data-bs-toggle="modal"
                                                         data-bs-target="#modal-master" id="button-master-staff"
-                                                        data-code="{{$datas->master_cabang_code}}"><i
-                                                            class="fas fa-download"></i></span> Master Staff</button>
-                                                    <button class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-master" id="button-master-staff"
                                                         data-code="123"><i
                                                             class="fas fa-clipboard-check"></i>
-                                                        Verification Invoice</button>
+                                                        Edit Data</button>
                                             </div>
                                         </div>
                                     </td>
@@ -239,7 +231,7 @@
     </div>
 @endsection
 @section('base.js')
-    <div class="modal fade" id="modal-cabang" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+    <div class="modal fade" id="modal-jobs" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content border-0">
@@ -247,7 +239,7 @@
                     <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
                         data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="menu-cabang"></div>
+                <div id="menu-jobs"></div>
             </div>
         </div>
     </div>
@@ -279,14 +271,14 @@
         });
     </script>
     <script>
-        $(document).on("click", "#button-add-cabang", function(e) {
+        $(document).on("click", "#button-add-jobs", function(e) {
             e.preventDefault();
             // var code = $(this).data("code");
-            $('#menu-cabang').html(
+            $('#menu-jobs').html(
                 '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
             );
             $.ajax({
-                url: "{{ route('master_cabang_add') }}",
+                url: "{{ route('master_jobs_add') }}",
                 type: "POST",
                 cache: false,
                 data: {
@@ -295,9 +287,9 @@
                 },
                 dataType: 'html',
             }).done(function(data) {
-                $('#menu-cabang').html(data);
+                $('#menu-jobs').html(data);
             }).fail(function() {
-                $('#menu-cabang').html('eror');
+                $('#menu-jobs').html('eror');
             });
 
         });
@@ -320,28 +312,6 @@
                 $('#menu-master').html(data);
             }).fail(function() {
                 $('#menu-master').html('eror');
-            });
-
-        });
-        $(document).on("click", "#button-add-master-staff", function(e) {
-            e.preventDefault();
-            var code = $(this).data("code");
-            $('#form-master-staff').html(
-                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
-            );
-            $.ajax({
-                url: "{{ route('master_cabang_add_staff_form') }}",
-                type: "POST",
-                cache: false,
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "code": code
-                },
-                dataType: 'html',
-            }).done(function(data) {
-                $('#form-master-staff').html(data);
-            }).fail(function() {
-                $('#form-master-staff').html('eror');
             });
 
         });

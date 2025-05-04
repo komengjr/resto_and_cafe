@@ -75,7 +75,7 @@ class AppController extends Controller
         if ($this->url_akses($akses) == true) {
             $data = DB::table('t_product')
                 ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')
-                ->where('t_product.master_cabang_code',Auth::user()->access_cabang)->get();
+                ->where('t_product.master_cabang_code', Auth::user()->access_cabang)->get();
             return view('app.product', ['data' => $data]);
         } else {
             return Redirect::to('dashboard/home');
@@ -166,7 +166,7 @@ class AppController extends Controller
     public function app_stok_find_search(Request $request)
     {
         $data = DB::table('t_product')->where('t_product_name', 'like', '%' . $request->code . '%')
-        ->where('master_cabang_code',Auth::user()->access_cabang)->get();
+            ->where('master_cabang_code', Auth::user()->access_cabang)->get();
         return view('app.stok.hasil-pencarian', ['data' => $data]);
     }
     public function app_stok_find_detail(Request $request)
@@ -186,7 +186,7 @@ class AppController extends Controller
     public function app_stok_find_keyword(Request $request)
     {
         $data = DB::table('t_product')->where('t_product_name', 'like', '%' . $request->code . '%')
-        ->where('master_cabang_code',Auth::user()->access_cabang)->get();
+            ->where('master_cabang_code', Auth::user()->access_cabang)->get();
         return view('app.stok.hasil-keyword', ['data' => $data]);
     }
     public function app_stok_find_keyword_save(Request $request)
@@ -209,10 +209,10 @@ class AppController extends Controller
     public function app_table($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $data = DB::table('m_table_master')->where('m_table_master.m_table_master_cab',Auth::user()->access_cabang)->get();
+            $data = DB::table('m_table_master')->where('m_table_master.m_table_master_cab', Auth::user()->access_cabang)->get();
             $proses = DB::table('m_table_master')
                 ->join('m_order_list', 'm_order_list.m_order_table', '=', 'm_table_master.m_table_master_code')
-                ->where('m_table_master.m_table_master_cab',Auth::user()->access_cabang)
+                ->where('m_table_master.m_table_master_cab', Auth::user()->access_cabang)
                 ->where('m_order_list.m_order_status', 0)->get();
             return view('app.table-service', ['data' => $data, 'proses' => $proses]);
         } else {
@@ -237,19 +237,30 @@ class AppController extends Controller
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
-    public function inventaris()
+    // INVENTARIS
+    public function inventaris($akses)
     {
-        return view('app.inventaris');
+        if ($this->url_akses($akses) == true) {
+            return view('app.inventaris');
+        } else {
+            return Redirect::to('dashboard/home');
+        }
     }
-
+    public function app_inventaris_add(){
+        $lokasi = DB::table('master_location')->where('master_location_cabang',Auth::user()->access_cabang)->get();
+        return view('app.inventaris.form-add',['lokasi'=>$lokasi]);
+    }
+    public function app_inventaris_save(Request $request){
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
     // MENU ORDER
     public function menu_order($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $cabang = DB::table('master_cabang')->where('master_cabang_code',Auth::user()->access_cabang)->first();
-            $data = DB::table('t_product')->where('t_product_status', 1)->where('master_cabang_code',Auth::user()->access_cabang)->get();
+            $cabang = DB::table('master_cabang')->where('master_cabang_code', Auth::user()->access_cabang)->first();
+            $data = DB::table('t_product')->where('t_product_status', 1)->where('master_cabang_code', Auth::user()->access_cabang)->get();
             $cat = DB::table('t_category')->get();
-            return view('app.menu-order', ['data' => $data, 'cat' => $cat,'cabang'=>$cabang]);
+            return view('app.menu-order', ['data' => $data, 'cat' => $cat, 'cabang' => $cabang]);
         } else {
             return Redirect::to('dashboard/home');
         }
@@ -262,7 +273,7 @@ class AppController extends Controller
     public function menu_order_create_table()
     {
         $table = DB::table('m_table_master')
-            ->where('m_table_master_cab',Auth::user()->access_cabang)
+            ->where('m_table_master_cab', Auth::user()->access_cabang)
             // ->join('m_order_list','m_order_list.m_order_table','=','m_table_master.m_table_master_code')
             ->get();
         return view('app.menu-order.choose-table', ['table' => $table]);
@@ -276,10 +287,10 @@ class AppController extends Controller
     {
         if ($request->id == "all") {
             $data = DB::table('t_product')
-                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->where('t_product.master_cabang_code',Auth::user()->access_cabang)->get();
+                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->where('t_product.master_cabang_code', Auth::user()->access_cabang)->get();
         } else {
             $data = DB::table('t_product')
-                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->where('t_product.master_cabang_code',Auth::user()->access_cabang)
+                ->join('t_category', 't_category.t_category_code', '=', 't_product.t_category_code')->where('t_product.master_cabang_code', Auth::user()->access_cabang)
                 ->where('t_category.t_category_code', $request->id)->get();
         }
         return view('app.menu-order.option-category', ['data' => $data]);
@@ -303,16 +314,17 @@ class AppController extends Controller
     }
     public function menu_remove_cart_product(Request $request)
     {
-        DB::table('log_order_request')->where('no_order',$request->order)->where('t_product_code',$request->code)->delete();
+        DB::table('log_order_request')->where('no_order', $request->order)->where('t_product_code', $request->code)->delete();
         $data = DB::table('log_order_request')->join('t_product', 't_product.t_product_code', '=', 'log_order_request.t_product_code')->where('no_order', $request->order)->get();
         return view('app.menu-order.list-order', ['data' => $data]);
     }
-    public function menu_edit_cart_order(Request $request){
-        DB::table('log_order_request')->where('no_order',$request->order)->where('t_product_code',$request->code)->update(['quantity'=>$request->qty]);
-        $data = DB::table('t_product')->where('t_product_code',$request->code)->first();
-        $diskon = $data->t_product_price - ($data->t_product_price*$data->t_product_disc/100);
+    public function menu_edit_cart_order(Request $request)
+    {
+        DB::table('log_order_request')->where('no_order', $request->order)->where('t_product_code', $request->code)->update(['quantity' => $request->qty]);
+        $data = DB::table('t_product')->where('t_product_code', $request->code)->first();
+        $diskon = $data->t_product_price - ($data->t_product_price * $data->t_product_disc / 100);
         $hasil = ($request->qty) * $diskon;
-        $total = "Rp. ".number_format($hasil,0,',','.')."";
+        $total = "Rp. " . number_format($hasil, 0, ',', '.') . "";
         return $total;
     }
     public function menu_confrim_order_customer(Request $request)
@@ -392,7 +404,7 @@ class AppController extends Controller
         if ($this->url_akses($akses) == true) {
             $data = DB::table('m_order_list')
                 ->join('m_table_master', 'm_table_master.m_table_master_code', '=', 'm_order_list.m_order_table')
-                ->where('m_order_list.m_order_cabang',Auth::user()->access_cabang)
+                ->where('m_order_list.m_order_cabang', Auth::user()->access_cabang)
                 ->orderBy('m_order_list.id', 'DESC')->get();
             return view('app.order-list', ['data' => $data]);
         } else {
@@ -449,7 +461,8 @@ class AppController extends Controller
     {
         return view('app.list-order.detail-order');
     }
-    public function add_order_list(Request $request){
+    public function add_order_list(Request $request)
+    {
         return view('app.list-order.add-menu-order');
     }
     // KITCHEN
@@ -457,8 +470,8 @@ class AppController extends Controller
     {
         if ($this->url_akses($akses) == true) {
             $data = DB::table('m_order_list')
-            ->where('m_order_cabang',Auth::user()->access_cabang)
-            ->where('m_order_status', 0)->get();
+                ->where('m_order_cabang', Auth::user()->access_cabang)
+                ->where('m_order_status', 0)->get();
             return view('app.kitchen', ['data' => $data]);
         } else {
             return Redirect::to('dashboard/home');
@@ -491,22 +504,24 @@ class AppController extends Controller
         if ($this->url_akses($akses) == true) {
             $product = DB::table('t_product')->get();
             $data = DB::table('m_bahan_master')->get();
-            return view('app.bahan-baku',['data'=>$data,'product'=>$product]);
+            return view('app.bahan-baku', ['data' => $data, 'product' => $product]);
         } else {
             return Redirect::to('dashboard/home');
         }
     }
-    public function bahan_baku_add(Request $request){
+    public function bahan_baku_add(Request $request)
+    {
         return view('app.bahan-baku.form-add');
     }
-    public function bahan_baku_save(Request $request){
+    public function bahan_baku_save(Request $request)
+    {
         DB::table('m_bahan_master')->insert([
-            'm_bahan_code'=>Str::uuid(),
-            'm_bahan_name'=>$request->name,
-            'm_bahan_type'=>$request->type,
-            'm_bahan_satuan'=>$request->satuan,
-            'm_bahan_status'=>1,
-            'created_at'=>now(),
+            'm_bahan_code' => Str::uuid(),
+            'm_bahan_name' => $request->name,
+            'm_bahan_type' => $request->type,
+            'm_bahan_satuan' => $request->satuan,
+            'm_bahan_status' => 1,
+            'created_at' => now(),
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
@@ -546,9 +561,9 @@ class AppController extends Controller
     public function defisit_money($akses)
     {
         if ($this->url_akses($akses) == true) {
-            $data = DB::table('q_inv_data')->where('cabang_inv',Auth::user()->access_cabang)->get();
-            $total = DB::table('q_inv_data')->where('cabang_inv',Auth::user()->access_cabang)->sum('price_inv');
-            $totalterima = DB::table('q_inv_data')->where('cabang_inv',Auth::user()->access_cabang)->where('status_inv', 2)->sum('price_inv');
+            $data = DB::table('q_inv_data')->where('cabang_inv', Auth::user()->access_cabang)->get();
+            $total = DB::table('q_inv_data')->where('cabang_inv', Auth::user()->access_cabang)->sum('price_inv');
+            $totalterima = DB::table('q_inv_data')->where('cabang_inv', Auth::user()->access_cabang)->where('status_inv', 2)->sum('price_inv');
             return view('app.pengeluaran', ['data' => $data, 'total' => $total, 'totalterima' => $totalterima]);
         } else {
             return Redirect::to('dashboard/home');
@@ -624,16 +639,16 @@ class AppController extends Controller
     public function defisit_detail_invoice(Request $request)
     {
         $data = DB::table('q_inv_data')->where('no_inv', $request->code)->first();
-        return view('app.pengeluaran.modal-detail', ['data' => $data,'code'=>$request->code]);
+        return view('app.pengeluaran.modal-detail', ['data' => $data, 'code' => $request->code]);
 
     }
     public function defisit_detail_print_invoice(Request $request)
     {
         $image = base64_encode(file_get_contents(public_path('resto.png')));
         $data = DB::table('q_inv_detail')
-        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
-        ->where('q_inv_detail.no_inv',$request->fix_order)->get();
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadview('app.pengeluaran.report.detail-invoice',['data'=>$data], compact('image'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'Courier']);
+            ->join('m_bahan_master', 'm_bahan_master.m_bahan_code', '=', 'q_inv_detail.m_bahan_code')
+            ->where('q_inv_detail.no_inv', $request->fix_order)->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadview('app.pengeluaran.report.detail-invoice', ['data' => $data], compact('image'))->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'Courier']);
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
 
@@ -653,43 +668,46 @@ class AppController extends Controller
     }
     public function defisit_verification_invoice(Request $request)
     {
-        $inv = DB::table('q_inv_data')->where('no_inv',$request->code)->first();
+        $inv = DB::table('q_inv_data')->where('no_inv', $request->code)->first();
         $data = DB::table('q_inv_detail')
-        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
-        ->where('q_inv_detail.no_inv',$request->code)->get();
-        return view('app.pengeluaran.modal-verification',['data'=>$data,'inv'=>$inv]);
+            ->join('m_bahan_master', 'm_bahan_master.m_bahan_code', '=', 'q_inv_detail.m_bahan_code')
+            ->where('q_inv_detail.no_inv', $request->code)->get();
+        return view('app.pengeluaran.modal-verification', ['data' => $data, 'inv' => $inv]);
     }
     public function defisit_input_bahan_invoice(Request $request)
     {
         $bahan = DB::table('q_inv_detail')
-        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
-        ->where('q_inv_detail.no_inv',$request->code)->get();
+            ->join('m_bahan_master', 'm_bahan_master.m_bahan_code', '=', 'q_inv_detail.m_bahan_code')
+            ->where('q_inv_detail.no_inv', $request->code)->get();
         $data = DB::table('m_bahan_master')->get();
-        return view('app.pengeluaran.input-bahan',['data'=>$data ,'code'=>$request->code ,'bahan'=>$bahan]);
+        return view('app.pengeluaran.input-bahan', ['data' => $data, 'code' => $request->code, 'bahan' => $bahan]);
     }
-    public function defisit_save_bahan_invoice(Request $request){
+    public function defisit_save_bahan_invoice(Request $request)
+    {
         DB::table('q_inv_detail')->insert([
-            'no_inv'=>$request->no_inv,
-            'm_bahan_code'=>$request->bahan,
-            'qty_detail'=>$request->qty,
-            'price_detail'=>$request->harga,
-            'created_at'=>now(),
+            'no_inv' => $request->no_inv,
+            'm_bahan_code' => $request->bahan,
+            'qty_detail' => $request->qty,
+            'price_detail' => $request->harga,
+            'created_at' => now(),
         ]);
         $data = DB::table('q_inv_detail')
-        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
-        ->where('q_inv_detail.no_inv',$request->no_inv)->get();
-        return view('app.pengeluaran.table-bahan',['data'=>$data]);
+            ->join('m_bahan_master', 'm_bahan_master.m_bahan_code', '=', 'q_inv_detail.m_bahan_code')
+            ->where('q_inv_detail.no_inv', $request->no_inv)->get();
+        return view('app.pengeluaran.table-bahan', ['data' => $data]);
     }
-    public function defisit_remove_bahan_invoice(Request $request){
-        DB::table('q_inv_detail')->where('id_inv_detail',$request->id)->delete();
+    public function defisit_remove_bahan_invoice(Request $request)
+    {
+        DB::table('q_inv_detail')->where('id_inv_detail', $request->id)->delete();
         $data = DB::table('q_inv_detail')
-        ->join('m_bahan_master','m_bahan_master.m_bahan_code','=','q_inv_detail.m_bahan_code')
-        ->where('q_inv_detail.no_inv',$request->code)->get();
-        return view('app.pengeluaran.table-bahan',['data'=>$data]);
+            ->join('m_bahan_master', 'm_bahan_master.m_bahan_code', '=', 'q_inv_detail.m_bahan_code')
+            ->where('q_inv_detail.no_inv', $request->code)->get();
+        return view('app.pengeluaran.table-bahan', ['data' => $data]);
     }
-    public function defisit_send_verification_invoice(Request $request){
-        DB::table('q_inv_data')->where('no_inv',$request->code)->update([
-            'status_inv'=>1
+    public function defisit_send_verification_invoice(Request $request)
+    {
+        DB::table('q_inv_data')->where('no_inv', $request->code)->update([
+            'status_inv' => 1
         ]);
         return 123;
     }
@@ -783,10 +801,9 @@ class AppController extends Controller
         // $customPaper = array(0, 0, 420, 640);
         $first = $request->first;
         $end = $request->end;
-        $data = DB::table('m_order_list')
-            ->join('m_table_master', 'm_table_master.m_table_master_code', '=', 'm_order_list.m_order_table')
-            ->orderBy('m_order_list.id', 'DESC')
-            ->orWhereBetween('m_order_date', [$first, $end])
+        $data = DB::table('q_inv_data')
+            ->orderBy('id_invoice', 'DESC')
+            ->orWhereBetween('date_inv', [$first, $end])
             ->get();
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadview('app.report.preview.report-pembelanjaan', ['data' => $data, 'first' => $first, 'end' => $end], compact('image'))->setPaper('A4', 'landscape')->setOptions(['defaultFont' => 'Courier']);
         $pdf->output();

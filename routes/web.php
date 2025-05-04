@@ -101,7 +101,8 @@ Route::prefix('app')->group(function () {
     Route::post('table/add', [AppController::class, 'app_table_add'])->name('app_table_add');
     Route::post('table/save', [AppController::class, 'app_table_save'])->name('app_table_save');
     // INVENTARIS
-    Route::post('inventaris/add', [AppController::class, 'inventaris'])->name('inventaris');
+    Route::post('inventaris/add', [AppController::class, 'app_inventaris_add'])->name('app_inventaris_add');
+    Route::post('inventaris/save', [AppController::class, 'app_inventaris_save'])->name('app_inventaris_save');
     // ORDER MENU
     Route::post('order-menu/create-order', [AppController::class, 'menu_order_create'])->name('menu_order_create');
     Route::post('order-menu/create-order-table', [AppController::class, 'menu_order_create_table'])->name('menu_order_create_table');
@@ -163,7 +164,11 @@ Route::prefix('master')->group(function () {
     Route::post('cabang/add', [MasterController::class, 'master_cabang_add'])->name('master_cabang_add');
     Route::post('cabang/save', [MasterController::class, 'master_cabang_save'])->name('master_cabang_save');
     Route::post('cabang/add-staff', [MasterController::class, 'master_cabang_add_staff'])->name('master_cabang_add_staff');
+    Route::post('cabang/add-staff-form', [MasterController::class, 'master_cabang_add_staff_form'])->name('master_cabang_add_staff_form');
     Route::post('cabang/add-staff-save', [MasterController::class, 'master_cabang_save_staff'])->name('master_cabang_save_staff');
+    Route::get('jobs', [MasterController::class, 'master_job'])->name('master_job');
+    Route::post('jobs/add', [MasterController::class, 'master_jobs_add'])->name('master_jobs_add');
+    Route::post('jobs/save', [MasterController::class, 'master_jobs_save'])->name('master_jobs_save');
     Route::get('user', [MasterController::class, 'master_user'])->name('master_user');
     Route::post('user/add', [MasterController::class, 'master_user_add'])->name('master_user_add');
     Route::post('user/save', [MasterController::class, 'master_user_save'])->name('master_user_save');

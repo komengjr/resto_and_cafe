@@ -278,6 +278,13 @@
                                                 class="nav-link-text ps-1">Master Cabang</span>
                                         </div>
                                     </a>
+                                    <!-- parent pages--><a class="nav-link" href="{{ route('master_job') }}"
+                                        role="button" aria-expanded="false">
+                                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                                    class="fas fa-user-graduate"></span></span><span
+                                                class="nav-link-text ps-1">Master Jabatan</span>
+                                        </div>
+                                    </a>
                                     <!-- parent pages--><a class="nav-link" href="{{ route('master_user') }}"
                                         role="button" aria-expanded="false">
                                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span

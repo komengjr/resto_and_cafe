@@ -65,8 +65,14 @@ class MasterController extends Controller
     }
     public function master_cabang_add_staff(Request $request){
         $data = DB::table('master_cabang')->where('master_cabang_code',$request->code)->first();
+        $jobs = DB::table('master_jobs')->where('master_jobs_cabang',$request->code)->get();
         $staff = DB::table('master_staff')->where('master_staff_cab',$request->code)->get();
-        return view('master.cabang.form-add-staff',['data'=>$data,'staff'=>$staff]);
+        return view('master.cabang.form-add-staff',['data'=>$data,'staff'=>$staff,'jobs'=>$jobs]);
+    }
+    public function master_cabang_add_staff_form(Request $request){
+        $data = DB::table('master_cabang')->where('master_cabang_code',$request->code)->first();
+        $jobs = DB::table('master_jobs')->where('master_jobs_cabang',$request->code)->get();
+        return view('master.cabang.form-staff',['data'=>$data,'jobs'=>$jobs]);
     }
     public function master_cabang_save_staff(Request $request){
         $file = $request->file('file');
@@ -87,6 +93,24 @@ class MasterController extends Controller
             'master_staff_alamat'=>$request->alamat,
             'master_staff_file'=>$tujuan_upload . '/' . $file->getClientOriginalName(),
             'created_at' => now()
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
+    public function master_job(){
+        $jobs = DB::table('master_jobs')->join('master_cabang','master_cabang.master_cabang_code','=','master_jobs.master_jobs_cabang')->get();
+        return view('master.jobs',['jobs'=>$jobs]);
+    }
+    public function master_jobs_add(Request $request){
+        $cabang = DB::table('master_cabang')->get();
+        return view('master.jobs.form-add',['cabang'=>$cabang]);
+    }
+    public function master_jobs_save(Request $request){
+        DB::table('master_jobs')->insert([
+            'master_jobs_code'=>$request->code,
+            'master_jobs_name'=>$request->name,
+            'master_jobs_cabang'=>$request->cabang,
+            'master_jobs_status'=>0,
+            'created_at'=>now()
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
