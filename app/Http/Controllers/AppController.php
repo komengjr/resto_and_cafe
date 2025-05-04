@@ -242,10 +242,13 @@ class AppController extends Controller
     {
         if ($this->url_akses($akses) == true) {
             $data = DB::table('inventaris_data')
-            ->join('inventaris_klasifikasi','inventaris_klasifikasi.inventaris_klasifikasi_code','=','inventaris_data.inventaris_klasifikasi_code')
-            ->join('master_location','master_location.master_location_code','=','inventaris_data.inventaris_data_location')
-            ->where('inventaris_data.inventaris_data_cabang',Auth::user()->access_cabang)->get();
-            return view('app.inventaris',['data'=>$data]);
+                ->join('inventaris_klasifikasi', 'inventaris_klasifikasi.inventaris_klasifikasi_code', '=', 'inventaris_data.inventaris_klasifikasi_code')
+                ->join('master_location', 'master_location.master_location_code', '=', 'inventaris_data.inventaris_data_location')
+                ->where('inventaris_data.inventaris_data_cabang', Auth::user()->access_cabang)->get();
+            $inventaris = DB::table('inventaris_data')->sum('inventaris_data_harga');
+            $aset = DB::table('inventaris_data')->where('inventaris_data_jenis',0)->sum('inventaris_data_harga');
+            $asets = DB::table('inventaris_data')->where('inventaris_data_jenis',0)->count();
+            return view('app.inventaris', ['data' => $data,'inventaris'=>$inventaris,'aset'=>$aset,'asets'=>$asets]);
         } else {
             return Redirect::to('dashboard/home');
         }
@@ -254,7 +257,7 @@ class AppController extends Controller
     {
         $klasifikasi = DB::table('inventaris_klasifikasi')->orderBy('id_inventaris_klasifikasi', 'desc')->get();
         $lokasi = DB::table('master_location')->where('master_location_cabang', Auth::user()->access_cabang)->get();
-        return view('app.inventaris.form-add', ['lokasi' => $lokasi,'klasifikasi'=>$klasifikasi]);
+        return view('app.inventaris.form-add', ['lokasi' => $lokasi, 'klasifikasi' => $klasifikasi]);
     }
     public function app_inventaris_upload_file(Request $request)
     {
@@ -292,22 +295,70 @@ class AppController extends Controller
     public function app_inventaris_save(Request $request)
     {
         DB::table('inventaris_data')->insert([
-            'inventaris_data_code'=>str::uuid(),
-            'inventaris_klasifikasi_code'=>$request->klasifikasi,
-            'inventaris_data_name'=>$request->name,
-            'inventaris_data_location'=>$request->lokasi,
-            'inventaris_data_jenis'=>$request->jenis,
-            'inventaris_data_harga'=>$request->harga,
-            'inventaris_data_merk'=>$request->merk,
-            'inventaris_data_type'=>$request->type,
-            'inventaris_data_no_seri'=>$request->seri,
-            'inventaris_data_suplier'=>$request->suplier,
-            'inventaris_data_tgl_beli'=>$request->tgl_beli,
-            'inventaris_data_file'=>$request->link,
-            'inventaris_data_kondisi'=>'BAIK',
-            'inventaris_data_status'=>0,
-            'inventaris_data_cabang'=>Auth::user()->access_cabang,
-            'created_at'=>now()
+            'inventaris_data_code' => str::uuid(),
+            'inventaris_klasifikasi_code' => $request->klasifikasi,
+            'inventaris_data_name' => $request->name,
+            'inventaris_data_location' => $request->lokasi,
+            'inventaris_data_jenis' => $request->jenis,
+            'inventaris_data_harga' => $request->harga,
+            'inventaris_data_merk' => $request->merk,
+            'inventaris_data_type' => $request->type,
+            'inventaris_data_no_seri' => $request->seri,
+            'inventaris_data_suplier' => $request->suplier,
+            'inventaris_data_tgl_beli' => $request->tgl_beli,
+            'inventaris_data_file' => $request->link,
+            'inventaris_data_kondisi' => 'BAIK',
+            'inventaris_data_status' => 0,
+            'inventaris_data_cabang' => Auth::user()->access_cabang,
+            'created_at' => now()
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
+    }
+    public function app_inventaris_print_barcode(Request $request)
+    {
+        $data = DB::table('inventaris_data')->where('inventaris_data_code', $request->code)->first();
+        $customPaper = array(0, 0, 50.80, 95.20);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadview('app.inventaris.report.barcode', ['data' => $data])->setPaper($customPaper, 'landscape')->setOptions(['defaultFont' => 'Helvetica']);
+        $pdf->output();
+        $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $height = $canvas->get_height();
+        $width = $canvas->get_width();
+
+        $canvas->set_opacity(.2, "Multiply");
+
+        $canvas->set_opacity(.1);
+
+        // $canvas->page_text($width/5, $height/2, 'Lunas', '123', 30, array(22,0,0),1,2,0);
+        $canvas->page_script('
+            $pdf->set_opacity(.1);
+            $pdf->image("resto.png", 80, 180, 255, 220);
+            ');
+        return base64_encode($pdf->stream());
+    }
+    public function app_inventaris_update(Request $request)
+    {
+        $data = DB::table('inventaris_data')
+            ->join('inventaris_klasifikasi', 'inventaris_klasifikasi.inventaris_klasifikasi_code', '=', 'inventaris_data.inventaris_klasifikasi_code')
+            ->join('master_location', 'master_location.master_location_code', '=', 'inventaris_data.inventaris_data_location')
+            ->where('inventaris_data.inventaris_data_code', $request->code)->first();
+        return view('app.inventaris.form-update', ['data' => $data]);
+    }
+    public function app_inventaris_save_update(Request $request)
+    {
+        $nilai = preg_replace("/[^0-9]/", "", $request->harga);
+        DB::table('inventaris_data')->where('inventaris_data_code', $request->code)->update([
+            'inventaris_klasifikasi_code' => $request->klasifikasi,
+            'inventaris_data_name' => $request->name,
+            'inventaris_data_location' => $request->lokasi,
+            'inventaris_data_jenis' => $request->jenis,
+            'inventaris_data_harga' => $nilai,
+            'inventaris_data_merk' => $request->merk,
+            'inventaris_data_type' => $request->type,
+            'inventaris_data_no_seri' => $request->seri,
+            'inventaris_data_suplier' => $request->suplier,
+            'inventaris_data_tgl_beli' => $request->tgl_beli,
+            'inventaris_data_file' => $request->link,
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }

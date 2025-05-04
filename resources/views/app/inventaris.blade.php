@@ -46,7 +46,7 @@
                         <!--/.bg-holder-->
 
                         <div class="card-body position-relative">
-                            <h6>Total Inventaris<span class="badge badge-soft-warning rounded-pill ms-2">0%</span></h6>
+                            <h6>Total Inventaris<span class="badge badge-soft-warning rounded-pill ms-2">@currency($inventaris)</span></h6>
                             <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-warning"
                                 data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>{{ $data->count() }}</div>
                             <a class="fw-semi-bold fs--1 text-nowrap" href="#">See all<span
@@ -62,10 +62,10 @@
                         <!--/.bg-holder-->
 
                         <div class="card-body position-relative">
-                            <h6>Aset<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
+                            <h6>Aset<span class="badge badge-soft-info rounded-pill ms-2">@currency($aset)</span></h6>
                             <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-info"
-                                data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>0</div><a
-                                class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">Show
+                                data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>{{$asets}}</div><a
+                                class="fw-semi-bold fs--1 text-nowrap" href="#">Show
                                 Data<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                         </div>
                     </div>
@@ -78,9 +78,9 @@
                         <!--/.bg-holder-->
 
                         <div class="card-body position-relative">
-                            <h6>Non Aset<span class="badge badge-soft-success rounded-pill ms-2">9.54%</span></h6>
+                            <h6>Non Aset<span class="badge badge-soft-success rounded-pill ms-2">@currency($inventaris-$aset)</span></h6>
                             <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif"
-                                data-countup='{"endValue":43594,"prefix":"$"}'>0</div><a
+                                data-countup='{"endValue":43594,"prefix":"$"}'>{{ $data->count() - $asets }}</div><a
                                 class="fw-semi-bold fs--1 text-nowrap" href="#">Show Data<span
                                     class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                         </div>
@@ -145,12 +145,12 @@
                                                     data-fa-transform="shrink-3"></span>Option</button>
                                             <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
                                                 <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-inventaris" id="button-master-staff"
+                                                    data-bs-target="#modal-inventaris" id="button-print-inventaris"
                                                     data-code="{{ $datas->inventaris_data_code }}"><i
                                                         class="fas fa-qrcode"></i></span> Cetak Barcode</button>
                                                 <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-inventaris" id="button-master-staff"
-                                                    data-code="123"><i class="fas fa-clipboard-check"></i>
+                                                    data-bs-target="#modal-inventaris" id="button-edit-inventaris"
+                                                    data-code="{{ $datas->inventaris_data_code }}"><i class="fas fa-clipboard-check"></i>
                                                     Update Data</button>
                                             </div>
                                         </div>
@@ -228,16 +228,16 @@
             });
 
         });
-        $(document).on("click", "#button-edit-category", function(e) {
+        $(document).on("click", "#button-edit-inventaris", function(e) {
             e.preventDefault();
             var code = $(this).data("code");
             console.log(code);
 
-            $('#menu-category').html(
+            $('#menu-inventaris').html(
                 '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
             );
             $.ajax({
-                url: "{{ route('app_category_edit') }}",
+                url: "{{ route('app_inventaris_update') }}",
                 type: "POST",
                 cache: false,
                 data: {
@@ -246,9 +246,36 @@
                 },
                 dataType: 'html',
             }).done(function(data) {
-                $('#menu-category').html(data);
+                $('#menu-inventaris').html(data);
             }).fail(function() {
-                $('#menu-category').html('eror');
+                $('#menu-inventaris').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-print-inventaris", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            console.log(code);
+
+            $('#menu-inventaris').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('app_inventaris_print_barcode') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-inventaris').html(
+                        '<iframe src="data:application/pdf;base64, ' +
+                        data +
+                        '" style="width:100%; height:533px;" frameborder="0"></iframe>');
+            }).fail(function() {
+                $('#menu-inventaris').html('eror');
             });
 
         });

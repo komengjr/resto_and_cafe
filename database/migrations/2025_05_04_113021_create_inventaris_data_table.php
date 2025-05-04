@@ -20,7 +20,7 @@ class CreateInventarisDataTable extends Migration
             $table->string('inventaris_data_name');
             $table->string('inventaris_data_location');
             $table->string('inventaris_data_jenis');
-            $table->integer('inventaris_data_harga');
+            $table->bigInteger('inventaris_data_harga');
             $table->string('inventaris_data_merk');
             $table->string('inventaris_data_type');
             $table->string('inventaris_data_no_seri');
