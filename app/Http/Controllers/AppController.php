@@ -241,16 +241,74 @@ class AppController extends Controller
     public function inventaris($akses)
     {
         if ($this->url_akses($akses) == true) {
-            return view('app.inventaris');
+            $data = DB::table('inventaris_data')
+            ->join('inventaris_klasifikasi','inventaris_klasifikasi.inventaris_klasifikasi_code','=','inventaris_data.inventaris_klasifikasi_code')
+            ->join('master_location','master_location.master_location_code','=','inventaris_data.inventaris_data_location')
+            ->where('inventaris_data.inventaris_data_cabang',Auth::user()->access_cabang)->get();
+            return view('app.inventaris',['data'=>$data]);
         } else {
             return Redirect::to('dashboard/home');
         }
     }
-    public function app_inventaris_add(){
-        $lokasi = DB::table('master_location')->where('master_location_cabang',Auth::user()->access_cabang)->get();
-        return view('app.inventaris.form-add',['lokasi'=>$lokasi]);
+    public function app_inventaris_add()
+    {
+        $klasifikasi = DB::table('inventaris_klasifikasi')->orderBy('id_inventaris_klasifikasi', 'desc')->get();
+        $lokasi = DB::table('master_location')->where('master_location_cabang', Auth::user()->access_cabang)->get();
+        return view('app.inventaris.form-add', ['lokasi' => $lokasi,'klasifikasi'=>$klasifikasi]);
     }
-    public function app_inventaris_save(Request $request){
+    public function app_inventaris_upload_file(Request $request)
+    {
+        $receiver = new FileReceiver('file', $request, HandlerFactory::classFromRequest($request));
+        if (!$receiver->isUploaded()) {
+            // file not uploaded
+        }
+
+        $fileReceived = $receiver->receive(); // receive file
+        if ($fileReceived->isFinished()) { // file uploading is complete / all chunks are uploaded
+            $file = $fileReceived->getFile(); // get file
+            $extension = $file->getClientOriginalExtension();
+            $fileName = str_replace('.' . $extension, '', $file->getClientOriginalName()); //file name without extenstion
+            $fileName .= '_' . md5(time()) . '.' . $extension; // a unique file name
+
+            $disk = Storage::disk(config('filesystems.default'));
+            $path = $disk->putFileAs('public/file-inventaris/' . Auth::user()->userid, $file, $fileName);
+            // $path1 = $disk('videos', $file, $fileName);
+
+            // delete chunked file
+            unlink($file->getPathname());
+            return [
+                'path' => asset('public/file-inventaris/' . Auth::user()->userid . '/' . $fileName),
+                'filename' => 'public/file-inventaris/' . Auth::user()->userid . '/' . $fileName
+            ];
+        }
+
+        // otherwise return percentage informatoin
+        $handler = $fileReceived->handler();
+        return [
+            'done' => $handler->getPercentageDone(),
+            'status' => true
+        ];
+    }
+    public function app_inventaris_save(Request $request)
+    {
+        DB::table('inventaris_data')->insert([
+            'inventaris_data_code'=>str::uuid(),
+            'inventaris_klasifikasi_code'=>$request->klasifikasi,
+            'inventaris_data_name'=>$request->name,
+            'inventaris_data_location'=>$request->lokasi,
+            'inventaris_data_jenis'=>$request->jenis,
+            'inventaris_data_harga'=>$request->harga,
+            'inventaris_data_merk'=>$request->merk,
+            'inventaris_data_type'=>$request->type,
+            'inventaris_data_no_seri'=>$request->seri,
+            'inventaris_data_suplier'=>$request->suplier,
+            'inventaris_data_tgl_beli'=>$request->tgl_beli,
+            'inventaris_data_file'=>$request->link,
+            'inventaris_data_kondisi'=>'BAIK',
+            'inventaris_data_status'=>0,
+            'inventaris_data_cabang'=>Auth::user()->access_cabang,
+            'created_at'=>now()
+        ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
     // MENU ORDER

@@ -29,6 +29,7 @@ class CreateInventarisDataTable extends Migration
             $table->integer('inventaris_data_status');
             $table->string('inventaris_data_tgl_beli');
             $table->string('inventaris_data_cabang');
+            $table->text('inventaris_data_file');
             $table->timestamps();
         });
     }

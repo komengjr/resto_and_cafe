@@ -7,59 +7,22 @@
     <script src="{{ asset('vendors/typed.js/typed.js') }}"></script>
 @endsection
 @section('content')
-    <div class="row g-3">
-
+    <div class="row">
         <div class="col">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="row flex-between-center g-0">
-                                <div class="col-6 d-lg-block flex-between-center">
-                                    <h6 class="mb-2 text-900">Total Inventeris</h6>
-                                    <h4 class="fs-3 fw-normal text-700 mb-0">0</h4>
-                                </div>
-                                <div class="col-auto h-100">
-                                    <div style="height:50px;min-width:80px;"
-                                        data-echarts='{"xAxis":{"show":false,"boundaryGap":false},"series":[{"data":[3,7,6,8,5,12,11],"type":"line","symbol":"none"}],"grid":{"right":"0px","left":"0px","bottom":"0px","top":"0px"}}'>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="card bg-100 shadow-none border">
+                <div class="row gx-0 flex-between-center">
+                    <div class="col-sm-auto d-flex align-items-center"><img class="ms-n2"
+                            src="{{ asset('assets/img/illustrations/crm-bar-chart.png') }}" alt="" width="90" />
+                        <div>
+                            <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
+                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Data Inventaris &
+                                    Aset</span></h4>
+                        </div><img class="ms-n4 d-md-none d-lg-block"
+                            src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}" alt=""
+                            width="150" />
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="row flex-between-center">
-                                <div class="col d-md-flex d-lg-block flex-between-center">
-                                    <h6 class="mb-md-0 mb-lg-2">Tot</h6><span
-                                        class="badge rounded-pill badge-soft-success"><span class="fas fa-caret-up"></span>
-                                        61.8%</span>
-                                </div>
-                                <div class="col-auto">
-                                    <h4 class="fs-3 fw-normal text-700"
-                                        data-countup='{"endValue":82.18,"decimalPlaces":2,"suffix":"M","prefix":"$"}'>0</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="row flex-between-center">
-                                <div class="col d-md-flex d-lg-block flex-between-center">
-                                    <h6 class="mb-md-0 mb-lg-2">Conversion</h6><span
-                                        class="badge rounded-pill badge-soft-primary"><span class="fas fa-caret-up"></span>
-                                        29.4%</span>
-                                </div>
-                                <div class="col-auto">
-                                    <h4 class="fs-3 fw-normal text-primary"
-                                        data-countup='{"endValue":28.5,"decimalPlaces":2,"suffix":"%"}'>0</h4>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-auto p-3">
+
                     </div>
                 </div>
             </div>
@@ -83,10 +46,10 @@
                         <!--/.bg-holder-->
 
                         <div class="card-body position-relative">
-                            <h6>Klasifikasi<span class="badge badge-soft-warning rounded-pill ms-2">-0.23%</span></h6>
+                            <h6>Total Inventaris<span class="badge badge-soft-warning rounded-pill ms-2">0%</span></h6>
                             <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-warning"
-                                data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>0</div><a
-                                class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/customers.html">See all<span
+                                data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>{{ $data->count() }}</div>
+                            <a class="fw-semi-bold fs--1 text-nowrap" href="#">See all<span
                                     class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                         </div>
                     </div>
@@ -99,11 +62,11 @@
                         <!--/.bg-holder-->
 
                         <div class="card-body position-relative">
-                            <h6>Orders<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
+                            <h6>Aset<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
                             <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-info"
                                 data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>0</div><a
-                                class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">All
-                                orders<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+                                class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">Show
+                                Data<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                         </div>
                     </div>
                 </div>
@@ -115,10 +78,10 @@
                         <!--/.bg-holder-->
 
                         <div class="card-body position-relative">
-                            <h6>Revenue<span class="badge badge-soft-success rounded-pill ms-2">9.54%</span></h6>
+                            <h6>Non Aset<span class="badge badge-soft-success rounded-pill ms-2">9.54%</span></h6>
                             <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif"
                                 data-countup='{"endValue":43594,"prefix":"$"}'>0</div><a
-                                class="fw-semi-bold fs--1 text-nowrap" href="../index.html">Statistics<span
+                                class="fw-semi-bold fs--1 text-nowrap" href="#">Show Data<span
                                     class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                         </div>
                     </div>
@@ -138,7 +101,8 @@
                                 class="fas fa-ellipsis-h fs--2"></span></button>
                         <div class="dropdown-menu dropdown-menu-end border py-2"
                             aria-labelledby="dropdown-transaction-summary">
-                            <a class="dropdown-item" href="#!" data-bs-toggle="modal" data-bs-target="#modal-inventaris" id="button-add-inventaris">Add Data Inventaris</a>
+                            <a class="dropdown-item" href="#!" data-bs-toggle="modal"
+                                data-bs-target="#modal-inventaris" id="button-add-inventaris">Add Data Inventaris</a>
                             <a class="dropdown-item" href="#!">Export</a>
                             <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
                                 href="#!">Remove</a>
@@ -151,10 +115,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Barang</th>
-                                <th>Kode Barang</th>
+                                <th>Klasifikasi Barang</th>
                                 <th>Harga Barang</th>
                                 <th>Spesifikasi Barang</th>
-                                <th>Jenis Barang</th>
+                                <th>Lokasi Barang</th>
                                 <th>Tanggal Beli</th>
                                 <th>Action</th>
                             </tr>
@@ -163,7 +127,36 @@
                             @php
                                 $no = 1;
                             @endphp
-
+                            @foreach ($data as $datas)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $datas->inventaris_data_name }}</td>
+                                    <td>{{ $datas->inventaris_klasifikasi_name }}</td>
+                                    <td>@currency($datas->inventaris_data_harga)</td>
+                                    <td>{{ $datas->inventaris_data_merk }} / {{ $datas->inventaris_data_no_seri }}</td>
+                                    <td>{{ $datas->master_location_name }}</td>
+                                    <td>{{ $datas->inventaris_data_tgl_beli }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-primary dropdown-toggle"
+                                                id="btnGroupVerticalDrop2" type="button" data-bs-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false"><span
+                                                    class="fas fa-align-left me-1"
+                                                    data-fa-transform="shrink-3"></span>Option</button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
+                                                <button class="dropdown-item" data-bs-toggle="modal"
+                                                    data-bs-target="#modal-inventaris" id="button-master-staff"
+                                                    data-code="{{ $datas->inventaris_data_code }}"><i
+                                                        class="fas fa-qrcode"></i></span> Cetak Barcode</button>
+                                                <button class="dropdown-item" data-bs-toggle="modal"
+                                                    data-bs-target="#modal-inventaris" id="button-master-staff"
+                                                    data-code="123"><i class="fas fa-clipboard-check"></i>
+                                                    Update Data</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -187,7 +180,7 @@
 @section('base.js')
     <div class="modal fade" id="modal-inventaris" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
             <div class="modal-content border-0">
                 <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
                     <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
@@ -205,6 +198,7 @@
     <script src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.js"></script>
     <script src="{{ asset('vendors/choices/choices.min.js') }}"></script>
     <script src="{{ asset('vendors/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('online/resumable.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/img/animated-icons/loading.json') }}"></script> --}}
     <script>
         new DataTable('#example', {
