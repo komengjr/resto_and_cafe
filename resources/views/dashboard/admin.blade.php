@@ -243,14 +243,17 @@
                             <div class="form-check mb-0 d-flex">
                                 <input class="form-check-input form-check-input-primary" id="ecommerceLastMonth"
                                     type="checkbox" checked="checked" />
-                                <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommerceLastMonth">Last
-                                    Month<span class="text-dark d-none d-md-inline">: $32,502.00</span></label>
+                                <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommerceLastMonth">Cabang A<span class="text-dark d-none d-md-inline">: @currency(23400000)</span></label>
                             </div>
                             <div class="form-check mb-0 d-flex ps-0 ps-md-3">
                                 <input class="form-check-input ms-2 form-check-input-warning opacity-75"
                                     id="ecommercePrevYear" type="checkbox" checked="checked" />
-                                <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommercePrevYear">Prev
-                                    Year<span class="text-dark d-none d-md-inline">: $46,018.00</span></label>
+                                <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommercePrevYear">Cabang B<span class="text-dark d-none d-md-inline">: @currency(50300000)</span></label>
+                            </div>
+                            <div class="form-check mb-0 d-flex ps-0 ps-md-3">
+                                <input class="form-check-input ms-2 form-check-input-success opacity-75"
+                                    id="cabangc" type="checkbox" checked="checked" />
+                                <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="cabangc">Cabang C<span class="text-dark d-none d-md-inline">: @currency(40300000)</span></label>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -466,7 +469,8 @@
                                             </div>
                                         </td>
                                         <th class="align-middle white-space-nowrap name"><a
-                                                href="../app/e-commerce/customer-details.html">{{$orders->no_reg_order}}</a></th>
+                                                href="../app/e-commerce/customer-details.html">{{ $orders->no_reg_order }}</a>
+                                        </th>
                                         <td class="align-middle white-space-nowrap email">john@gmail.com</td>
                                         <td class="align-middle white-space-nowrap product">Slick - Drag &amp; Drop
                                             Bootstrap
@@ -521,7 +525,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @section('base.js')
@@ -529,4 +532,247 @@
     <script src="{{ asset('vendors/countup/countUp.umd.js') }}"></script>
     <script src="{{ asset('vendors/echarts/echarts.min.js') }}"></script>
     <script src="{{ asset('vendors/dayjs/dayjs.min.js') }}"></script>
+    <script>
+        const rupiah = (number) => {
+            return new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+            }).format(number);
+        }
+        var totalSalesEcommerce = function totalSalesEcommerce() {
+            var ECHART_LINE_TOTAL_SALES_ECOMM = ".echart-line-total-sales-ecommerce";
+            var $echartsLineTotalSalesEcomm = document.querySelector(
+                ECHART_LINE_TOTAL_SALES_ECOMM
+            );
+            var months = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ];
+
+            function getFormatter(params) {
+                return params
+                    .map(function(_ref16, index) {
+                        var value = _ref16.value,
+                            borderColor = _ref16.borderColor;
+                        return '<span class= "fas fa-circle" style="color: '
+                            .concat(
+                                borderColor,
+                                "\"></span>\n    <span class='text-600'>"
+                            )
+                            .concat(index === 0 ? "Cabang A " : "Cabang B ", ": ",)
+                            .concat(rupiah(value), "</span>");
+                    })
+                    .join("<br/>");
+            }
+
+            if ($echartsLineTotalSalesEcomm) {
+                // Get options from data attribute
+                var userOptions = utils.getData($echartsLineTotalSalesEcomm, "options");
+                var TOTAL_SALES_LAST_MONTH = "#".concat(userOptions.optionOne);
+                var TOTAL_SALES_PREVIOUS_YEAR = "#".concat(userOptions.optionTwo);
+                var totalSalesLastMonth = document.querySelector(
+                    TOTAL_SALES_LAST_MONTH
+                );
+                var totalSalesPreviousYear = document.querySelector(
+                    TOTAL_SALES_PREVIOUS_YEAR
+                );
+                var chart = window.echarts.init($echartsLineTotalSalesEcomm);
+
+                var getDefaultOptions = function getDefaultOptions() {
+                    return {
+                        color: utils.getGrays()["100"],
+                        tooltip: {
+                            trigger: "axis",
+                            padding: [7, 10],
+                            backgroundColor: utils.getGrays()["100"],
+                            borderColor: utils.getGrays()["300"],
+                            textStyle: {
+                                color: utils.getColors().dark,
+                            },
+                            borderWidth: 1,
+                            formatter: function formatter(params) {
+                                return getFormatter(params);
+                            },
+                            transitionDuration: 0,
+                            position: function position(pos, params, dom, rect, size) {
+                                return getPosition(pos, params, dom, rect, size);
+                            },
+                        },
+                        legend: {
+                            data: ["lastMonth", "previousYear"],
+                            show: false,
+                        },
+                        xAxis: {
+                            type: "category",
+                            data: [
+                                "2019-01-05",
+                                "2019-01-06",
+                                "2019-01-07",
+                                "2019-01-08",
+                                "2019-01-09",
+                                "2019-01-10",
+                                "2019-01-11",
+                                "2019-01-12",
+                                "2019-01-13",
+                                "2019-01-14",
+                                "2019-01-15",
+                                "2019-01-16",
+                            ],
+                            boundaryGap: false,
+                            axisPointer: {
+                                lineStyle: {
+                                    color: utils.getColor("300"),
+                                    type: "dashed",
+                                },
+                            },
+                            splitLine: {
+                                show: false,
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    // color: utils.getGrays()['300'],
+                                    color: utils.rgbaColor("#000", 0.01),
+                                    type: "dashed",
+                                },
+                            },
+                            axisTick: {
+                                show: false,
+                            },
+                            axisLabel: {
+                                color: utils.getColor("400"),
+                                formatter: function formatter(value) {
+                                    var date = new Date(value);
+                                    return ""
+                                        .concat(months[date.getMonth()], " ")
+                                        .concat(date.getDate());
+                                },
+                                margin: 15, // showMaxLabel: false
+                            },
+                        },
+                        yAxis: {
+                            type: "value",
+                            axisPointer: {
+                                show: false,
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: utils.getColor("300"),
+                                    type: "dashed",
+                                },
+                            },
+                            boundaryGap: false,
+                            axisLabel: {
+                                show: true,
+                                color: utils.getColor("400"),
+                                margin: 15,
+                            },
+                            axisTick: {
+                                show: false,
+                            },
+                            axisLine: {
+                                show: false,
+                            },
+                        },
+                        series: [{
+                                name: "lastMonth",
+                                type: "line",
+                                data: [500000, 800000, 600000, 800000, 650000, 900000, 1300000, 900000, 300000,
+                                    400000, 300000, 700000
+                                ],
+                                lineStyle: {
+                                    color: utils.getColor("primary"),
+                                },
+                                itemStyle: {
+                                    borderColor: utils.getColor("primary"),
+                                    borderWidth: 2,
+                                },
+                                symbol: "circle",
+                                symbolSize: 10,
+                                hoverAnimation: true,
+                                areaStyle: {
+                                    color: {
+                                        type: "linear",
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                                offset: 0,
+                                                color: utils.rgbaColor(
+                                                    utils.getColor("primary"),
+                                                    0.2
+                                                ),
+                                            },
+                                            {
+                                                offset: 1,
+                                                color: utils.rgbaColor(
+                                                    utils.getColor("primary"),
+                                                    0
+                                                ),
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            {
+                                name: "previousYear",
+                                type: "line",
+                                data: [
+                                    1100000, 300000, 400000, 500000, 800000, 700000, 500000, 400000,
+                                    1100000, 900000, 600000, 600000,
+                                ],
+                                lineStyle: {
+                                    color: utils.rgbaColor(
+                                        utils.getColor("warning"),
+                                        0.3
+                                    ),
+                                },
+                                itemStyle: {
+                                    borderColor: utils.rgbaColor(
+                                        utils.getColor("warning"),
+                                        0.6
+                                    ),
+                                    borderWidth: 2,
+                                },
+                                symbol: "circle",
+                                symbolSize: 10,
+                                hoverAnimation: true,
+                            },
+                        ],
+                        grid: {
+                            right: "18px",
+                            left: "40px",
+                            bottom: "15%",
+                            top: "5%",
+                        },
+                    };
+                };
+
+                echartSetOption(chart, userOptions, getDefaultOptions);
+                totalSalesLastMonth.addEventListener("click", function() {
+                    chart.dispatchAction({
+                        type: "legendToggleSelect",
+                        name: "lastMonth",
+                    });
+                });
+                totalSalesPreviousYear.addEventListener("click", function() {
+                    chart.dispatchAction({
+                        type: "legendToggleSelect",
+                        name: "previousYear",
+                    });
+                });
+            }
+        };
+        docReady(totalSalesEcommerce);
+    </script>
 @endsection

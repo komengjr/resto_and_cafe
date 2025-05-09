@@ -14,9 +14,11 @@
                             src="{{ asset('assets/img/illustrations/crm-bar-chart.png') }}" alt="" width="90" />
                         <div>
                             <h6 class="text-primary fs--1 mb-0">Welcome to </h6>
-                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Category Product</span></h4>
-                        </div><img class="ms-n4 d-md-none d-lg-block" src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}"
-                            alt="" width="150" />
+                            <h4 class="text-primary fw-bold mb-0">Resto <span class="text-info fw-medium">Category
+                                    Product</span></h4>
+                        </div><img class="ms-n4 d-md-none d-lg-block"
+                            src="{{ asset('assets/img/illustrations/crm-line-chart.png') }}" alt=""
+                            width="150" />
                     </div>
                     <div class="col-md-auto p-3">
 
@@ -26,8 +28,8 @@
         </div>
     </div>
     <div class="row mb-3 g-3">
-        <div class="col-xl-9 col-xxl-9">
-            <div class="card mb-3">
+        <div class="col-xl-12 col-xxl-12">
+            {{-- <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4 border-lg-end border-bottom border-lg-0 pb-3 pb-lg-0">
@@ -45,10 +47,11 @@
                                         data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
                                             class="fas fa-ellipsis-h fs--2"></span></button>
                                     <div class="dropdown-menu dropdown-menu-end border py-2"
-                                        aria-labelledby="dropdown-new-contact"><a class="dropdown-item"
-                                            href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                            href="#!">Remove</a>
+                                        aria-labelledby="dropdown-new-contact">
+                                        <a class="dropdown-item" href="#!" id="button-view-category" data-bs-toggle="modal" data-bs-target="#modal-category">View</a>
+                                        <a class="dropdown-item" href="#!">Export</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#!">Remove</a>
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +60,7 @@
                                     <p class="font-sans-serif lh-1 mb-1 fs-4 pe-2">100%</p>
                                     <div class="d-flex flex-column"> <span
                                             class="me-1 text-success fas fa-caret-up text-primary"></span>
-                                        <p class="fs--2 mb-0 text-nowrap">{{$data->count()}} </p>
+                                        <p class="fs--2 mb-0 text-nowrap">{{ $data->count() }} </p>
                                     </div>
                                 </div>
                                 <div class="echart-crm-statistics w-100 ms-2" data-echart-responsive="true"
@@ -136,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="card mb-3">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -197,8 +200,9 @@
                                                         class="far fa-edit"></span>
                                                     Edit</button>
                                                 <button class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#loading-modal" id="button-send-replay-massage-wa"
-                                                    data-code="{{ $item->t_category_code }}"><span class="far fa-folder-open"></span> Show
+                                                    data-bs-target="#modal-category-xl" id="button-product-category"
+                                                    data-code="{{ $item->t_category_code }}"><span
+                                                        class="far fa-folder-open"></span> Show
                                                     Product</button>
 
 
@@ -212,7 +216,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3">
+        {{-- <div class="col-xl-3">
             <div class="card">
                 <div class="card-header d-flex flex-between-center py-2 border-bottom">
                     <h6 class="mb-0">Analis Category</h6>
@@ -233,8 +237,6 @@
                     <div class="row align-items-center">
                         <div class="col-md-5 col-xl-12 mb-xl-3">
                             <div class="position-relative">
-                                <!-- Find the JS file for the following chart at: src/js/charts/echarts/most-leads.js-->
-                                <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
                                 <div class="echart-most-leads my-2" data-echart-responsive="true"></div>
                                 <div class="position-absolute top-50 start-50 translate-middle text-center">
                                     <p class="fs--1 mb-0 text-400 font-sans-serif fw-medium">Total</p>
@@ -259,19 +261,31 @@
                 <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link d-block py-2"
                         href="#!">Primary<span class="fas fa-chevron-right ms-1 fs--2"></span></a></div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
 @section('base.js')
     <div class="modal fade" id="modal-category" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document" >
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content border-0">
                 <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
                     <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
                         data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="menu-category"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-category-xl" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="menu-category-xl"></div>
             </div>
         </div>
     </div>
@@ -289,6 +303,7 @@
         });
     </script>
     <script>
+
         $(document).on("click", "#button-add-category", function(e) {
             e.preventDefault();
             // var code = $(this).data("code");
@@ -314,8 +329,6 @@
         $(document).on("click", "#button-edit-category", function(e) {
             e.preventDefault();
             var code = $(this).data("code");
-            console.log(code);
-
             $('#menu-category').html(
                 '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
             );
@@ -332,6 +345,28 @@
                 $('#menu-category').html(data);
             }).fail(function() {
                 $('#menu-category').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-product-category", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-category-xl').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('app_product_category') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-category-xl').html(data);
+            }).fail(function() {
+                $('#menu-category-xl').html('eror');
             });
 
         });

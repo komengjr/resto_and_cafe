@@ -22,7 +22,7 @@
             <select class="form-control choices-single-klasifikasi" name="klasifikasi" id="klasifikasi">
                 <option value="">Pilih Klasifikasi</option>
                 @foreach ($klasifikasi as $item)
-                    <option value="{{$item->inventaris_klasifikasi_code}}">{{$item->inventaris_klasifikasi_name}} - {{$item->inventaris_klasifikasi_code}}</option>
+                    <option value="{{$item->inventaris_klasifikasi_code}}">{{$item->inventaris_klasifikasi_code}} - {{$item->inventaris_klasifikasi_name}}</option>
                 @endforeach
             </select>
         </div>

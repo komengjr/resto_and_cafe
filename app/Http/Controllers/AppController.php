@@ -68,7 +68,10 @@ class AppController extends Controller
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }
-
+    public function app_product_category(Request $request){
+        $data = DB::table('t_product')->where('master_cabang_code',Auth::user()->access_cabang)->where('t_category_code',$request->code)->get();
+        return view('app.category.product-category',['data'=>$data]);
+    }
     // PRODUCT
     public function app_product($akses)
     {
@@ -245,9 +248,11 @@ class AppController extends Controller
                 ->join('inventaris_klasifikasi', 'inventaris_klasifikasi.inventaris_klasifikasi_code', '=', 'inventaris_data.inventaris_klasifikasi_code')
                 ->join('master_location', 'master_location.master_location_code', '=', 'inventaris_data.inventaris_data_location')
                 ->where('inventaris_data.inventaris_data_cabang', Auth::user()->access_cabang)->get();
-            $inventaris = DB::table('inventaris_data')->sum('inventaris_data_harga');
-            $aset = DB::table('inventaris_data')->where('inventaris_data_jenis',0)->sum('inventaris_data_harga');
-            $asets = DB::table('inventaris_data')->where('inventaris_data_jenis',0)->count();
+            $inventaris = DB::table('inventaris_data')->where('inventaris_data.inventaris_data_cabang', Auth::user()->access_cabang)->sum('inventaris_data_harga');
+            $aset = DB::table('inventaris_data')->where('inventaris_data_jenis',0)
+            ->where('inventaris_data.inventaris_data_cabang', Auth::user()->access_cabang)->sum('inventaris_data_harga');
+            $asets = DB::table('inventaris_data')->where('inventaris_data_jenis',0)
+            ->where('inventaris_data.inventaris_data_cabang', Auth::user()->access_cabang)->count();
             return view('app.inventaris', ['data' => $data,'inventaris'=>$inventaris,'aset'=>$aset,'asets'=>$asets]);
         } else {
             return Redirect::to('dashboard/home');
@@ -359,6 +364,22 @@ class AppController extends Controller
             'inventaris_data_suplier' => $request->suplier,
             'inventaris_data_tgl_beli' => $request->tgl_beli,
             'inventaris_data_file' => $request->link,
+        ]);
+        return redirect()->back()->withSuccess('Great! Berhasil Mengubah Data');
+    }
+    public function app_inventaris_add_klasifikasi(){
+        $cat = DB::table('inventaris_cat')->get();
+        $klasifikasi = DB::table('inventaris_klasifikasi')
+        ->join('inventaris_cat','inventaris_cat.inventaris_cat_code','=','inventaris_klasifikasi.inventaris_cat_code')->get();
+        return view('app.inventaris.form-add-klasifikasi',['cat'=>$cat,'klasifikasi'=>$klasifikasi]);
+    }
+    public function app_inventaris_save_klasifikasi(Request $request){
+        DB::table('inventaris_klasifikasi')->insert([
+            'inventaris_klasifikasi_code'=>$request->klasifikasi.'.'.$request->code,
+            'inventaris_cat_code'=>$request->klasifikasi,
+            'inventaris_klasifikasi_name'=>$request->name,
+            'inventaris_klasifikasi_file'=>null,
+            'created_at'=>now()
         ]);
         return redirect()->back()->withSuccess('Great! Berhasil Menambahkan Data');
     }

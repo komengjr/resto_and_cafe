@@ -103,9 +103,9 @@
                             aria-labelledby="dropdown-transaction-summary">
                             <a class="dropdown-item" href="#!" data-bs-toggle="modal"
                                 data-bs-target="#modal-inventaris" id="button-add-inventaris">Add Data Inventaris</a>
-                            <a class="dropdown-item" href="#!">Export</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                href="#!">Remove</a>
+                            <a class="dropdown-item" href="#!">Cetak Barcode</a>
+                            <div class="dropdown-divider"></div><a class="dropdown-item text-warning"
+                                href="#!" data-bs-toggle="modal" data-bs-target="#modal-inventaris" id="button-add-klasifikasi">Data Klasifikasi</a>
                         </div>
                     </div>
                 </div>
@@ -274,6 +274,29 @@
                         '<iframe src="data:application/pdf;base64, ' +
                         data +
                         '" style="width:100%; height:533px;" frameborder="0"></iframe>');
+            }).fail(function() {
+                $('#menu-inventaris').html('eror');
+            });
+
+        });
+
+        $(document).on("click", "#button-add-klasifikasi", function(e) {
+            e.preventDefault();
+            // var code = $(this).data("code");
+            $('#menu-inventaris').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('app_inventaris_add_klasifikasi') }}",
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": 0
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                $('#menu-inventaris').html(data);
             }).fail(function() {
                 $('#menu-inventaris').html('eror');
             });

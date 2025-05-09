@@ -83,6 +83,7 @@ Route::prefix('app')->group(function () {
     Route::post('category/save', [AppController::class, 'app_category_save'])->name('app_category_save');
     Route::post('category/edit', [AppController::class, 'app_category_edit'])->name('app_category_edit');
     Route::post('category/update', [AppController::class, 'app_category_update'])->name('app_category_update');
+    Route::post('category/product-category', [AppController::class, 'app_product_category'])->name('app_product_category');
     // PRODUCT
     Route::post('product/add', [AppController::class, 'app_product_add'])->name('app_product_add');
     Route::post('product/save', [AppController::class, 'app_product_save'])->name('app_product_save');
@@ -107,6 +108,8 @@ Route::prefix('app')->group(function () {
     Route::post('inventaris/print-barcode', [AppController::class, 'app_inventaris_print_barcode'])->name('app_inventaris_print_barcode');
     Route::post('inventaris/update', [AppController::class, 'app_inventaris_update'])->name('app_inventaris_update');
     Route::post('inventaris/save-update', [AppController::class, 'app_inventaris_save_update'])->name('app_inventaris_save_update');
+    Route::post('inventaris/add-klasifikasi', [AppController::class, 'app_inventaris_add_klasifikasi'])->name('app_inventaris_add_klasifikasi');
+    Route::post('inventaris/save-klasifikasi', [AppController::class, 'app_inventaris_save_klasifikasi'])->name('app_inventaris_save_klasifikasi');
     // ORDER MENU
     Route::post('order-menu/create-order', [AppController::class, 'menu_order_create'])->name('menu_order_create');
     Route::post('order-menu/create-order-table', [AppController::class, 'menu_order_create_table'])->name('menu_order_create_table');
