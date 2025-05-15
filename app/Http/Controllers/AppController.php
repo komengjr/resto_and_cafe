@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Exports\ProductExport;
 use Faker\Provider\Uuid;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Maatwebsite\Excel\Facades\Excel;
 use Session;
 use DB;
 use PDF;
@@ -152,6 +154,9 @@ class AppController extends Controller
     public function app_product_detail(Request $request)
     {
         return view('app.product.detail-product');
+    }
+    public function app_product_export_excel(){
+        return Excel::download(new ProductExport, 'Product-'.now().'.xlsx');
     }
     // STOK
     public function app_stok($akses)

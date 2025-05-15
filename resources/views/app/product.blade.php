@@ -144,6 +144,9 @@
                             <h5 class="mb-0">Data Product</h5>
                         </div>
                         <div class="col-auto">
+                            <a class="btn btn-falcon-warning btn-sm mx-2" data-bs-toggle="modal"
+                                data-bs-target="#modal-product" id="button-export-data-product">
+                                <span class="far fa-file-excel fs--2 me-1"></span>Export</a>
                             <a class="btn btn-falcon-primary btn-sm" href="#!" data-bs-toggle="modal"
                                 data-bs-target="#modal-product" id="button-add-product">
                                 <span class="far fa-plus-square fs--2 me-1"></span>Add Product</a>
@@ -380,6 +383,29 @@
                 dataType: 'html',
             }).done(function(data) {
                 $('#menu-product').html(data);
+            }).fail(function() {
+                $('#menu-product').html('eror');
+            });
+
+        });
+        $(document).on("click", "#button-export-data-product", function(e) {
+            e.preventDefault();
+            var code = $(this).data("code");
+            $('#menu-product').html(
+                '<div class="spinner-border my-3" style="display: block; margin-left: auto; margin-right: auto;" role="status"><span class="visually-hidden">Loading...</span></div>'
+            );
+            $.ajax({
+                url: "{{ route('app_product_export_excel') }}",
+                type: "GET",
+                cache: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "code": code
+                },
+                dataType: 'html',
+            }).done(function(data) {
+                window.location.replace("{{ route('app_product_export_excel') }}");
+                $('#menu-product').html('<span class="badge bg-success m-4">Berhasil Download</span>');
             }).fail(function() {
                 $('#menu-product').html('eror');
             });

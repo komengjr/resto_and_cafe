@@ -91,6 +91,7 @@ Route::prefix('app')->group(function () {
     Route::post('product/edit', [AppController::class, 'app_product_edit'])->name('app_product_edit');
     Route::post('product/update', [AppController::class, 'app_product_update'])->name('app_product_update');
     Route::post('product/detail', [AppController::class, 'app_product_detail'])->name('app_product_detail');
+    Route::get('product/export-excel', [AppController::class, 'app_product_export_excel'])->name('app_product_export_excel');
     // STOK
     Route::post('stok/find-keyword', [AppController::class, 'app_stok_find_keyword'])->name('app_stok_find_keyword');
     Route::post('stok/find-keyword/save', [AppController::class, 'app_stok_find_keyword_save'])->name('app_stok_find_keyword_save');
